@@ -20,6 +20,10 @@
 --      10/31/2018      Ray Sun         Verified entity functionality with 
 --                                      the provided `BCD2Binary8_tb` testbench
 --                                      with ModelSim-Altera.
+--      11/01/2018      Ray Sun         Modified the high nibble conversion to 
+--                                      use bit-shifting instead of a truth
+--                                      table. Verified functionality with 
+--                                      testbench.
 --------------------------------------------------------------------------------
 
 
@@ -54,34 +58,29 @@ end entity;
 architecture DataFlow of BCD2Binary8 is
 
     -- Number of bits in a nibble (one BCD digit)
-    constant    BITS_NIBBLE: positive := 4;
+    constant    BITS_NIBBLE: integer := 4;
     
     -- Signals for the binary representations of the upper and lower nibbles
-    signal      Bin_nib_h:  std_logic_vector (BITS-1 downto 0);
-    signal      Bin_nib_l:  std_logic_vector (BITS_NIBBLE-1 downto 0);
+    -- in unsigned type
+    signal      Bin_nib_h:  unsigned (BITS-1 downto 0);
+    signal      Bin_nib_l:  unsigned (BITS_NIBBLE-1 downto 0);
+    
+    -- The high nibble of the input, extended to BITS-bits
+    signal      Bcd_nib_h:  unsigned (BITS-1 downto 0);
     
 begin
 
     -- The lower nibble is already in binary (ranges from 0 to 9 in binary)
-    Bin_nib_l <= BCD(BITS_NIBBLE-1 downto 0);
+    Bin_nib_l <= unsigned(BCD(BITS_NIBBLE-1 downto 0));
     
     -- The upper nibble (0 to 9) represents 10 times the value of the nibble 
     -- in decimal
-    --      Use a with-select to assign a truth table of values
-    with BCD(BITS-1 downto BITS_NIBBLE) select
-        Bin_nib_h <=    "00000000" when "0000",     -- [0000]bcd -> [0]dec
-                        "00001010" when "0001",     -- [0001]bcd -> [10]dec
-                        "00010100" when "0010",     -- [0010]bcd -> [20]dec
-                        "00011110" when "0011",     -- [0011]bcd -> [30]dec
-                        "00101000" when "0100",     -- [0100]bcd -> [40]dec
-                        "00110010" when "0101",     -- [0101]bcd -> [50]dec
-                        "00111100" when "0110",     -- [0110]bcd -> [60]dec
-                        "01000110" when "0111",     -- [0111]bcd -> [70]dec
-                        "01010000" when "1000",     -- [1000]bcd -> [80]dec
-                        "01011010" when "1001",     -- [1001]bcd -> [90]dec
-                        "XXXXXXXX" when others;     -- error case
+    --      Use bit-shifts (10x = 8x + 2x)
+    -- Intermediate signal: "0000" & high nibble 
+    Bcd_nib_h <= resize(unsigned(BCD(BITS-1 downto BITS_NIBBLE)), BITS);
+    Bin_nib_h <= (Bcd_nib_h sll 3) + (Bcd_nib_h sll 1);
     
     -- The binary output is the sum of the converted binary nibbles
-    B <= std_logic_vector(unsigned(Bin_nib_h) + unsigned(Bin_nib_l));
+    B <= std_logic_vector(Bin_nib_h + Bin_nib_l);
 	 
 end architecture; 
