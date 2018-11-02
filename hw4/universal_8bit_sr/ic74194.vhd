@@ -20,6 +20,7 @@
 --      10/31/2018      Ray Sun         Verified entity functionality with 
 --                                      the provided `ic74194_tb` testbench
 --                                      with ModelSim-Altera.
+--      11/01/2018      Ray Sun         Removed magic numbers [TM].
 --------------------------------------------------------------------------------
 
 

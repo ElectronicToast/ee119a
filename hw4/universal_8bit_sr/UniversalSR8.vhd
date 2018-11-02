@@ -21,6 +21,7 @@
 --                                      in the testbenches.
 --      10/31/2018      Ray Sun         Split the entities into two different
 --                                      .vhd files.
+--      11/01/2018      Ray Sun         Removed magic numbers [TM].
 --------------------------------------------------------------------------------
 
 

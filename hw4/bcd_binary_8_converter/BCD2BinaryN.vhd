@@ -16,6 +16,9 @@
 --
 -- Revision History:
 --      11/01/2018      Ray Sun         Initial revision.
+--      11/01/2018      Ray Sun         Verified functionality with Quartus II
+--                                      waveform viewer for `N_BITS` up to 4.
+--      11/01/2018      Ray Sun         Removed magic numbers [TM].
 --------------------------------------------------------------------------------
 
 
