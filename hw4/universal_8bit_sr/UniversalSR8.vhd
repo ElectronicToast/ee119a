@@ -35,13 +35,14 @@ use ieee.std_logic_1164.all;
 
 entity UniversalSR8 is
     generic(
-        BITS :      integer := 8;
-        BITS_HALF : integer := 4 );
+        BITS :      integer := 8;       -- # bits in the SR
+        BITS_HALF : integer := 4;       -- # bits in each 74194 half of the SR
+        SEL_BITS :  integer := 2 );     -- # select lines
     port(
         D    : in      std_logic_vector(BITS-1 downto 0);   -- Parallel input
         LSer : in      std_logic;                           -- Serial left in
         RSer : in      std_logic;                           -- Serial right in
-        Mode : in      std_logic_vector(1 downto 0);        -- Mode select bits
+        Mode : in      std_logic_vector(SEL_BITS-1 downto 0);-- Mode select bits
         CLR  : in      std_logic;                           -- Asynch. clear
         CLK  : in      std_logic;                     
         Q    : buffer  std_logic_vector(BITS-1 downto 0) ); -- Outputs
@@ -58,12 +59,12 @@ architecture Structural of UniversalSR8 is
     -- Component declaration for the two 74xx194 4-bit SRs
     component ic74194 port(
         CLR:    in      std_logic;
-        S:      in      std_logic_vector (1 downto 0);      -- (S1, S0)
+        S:      in      std_logic_vector (SEL_BITS-1 downto 0);     -- (S1, S0)
         CLK:    in      std_logic;
         LSI:    in      std_logic;
         RSI:    in      std_logic;
-        DO:     buffer  std_logic_vector (0 to 3);   -- Map (A, B, C, D) as 
-        DI:     in      std_logic_vector (0 to 3) ); -- (0 to 3) for DI and DO
+        DO:     buffer  std_logic_vector (0 to BITS_HALF-1);   
+        DI:     in      std_logic_vector (0 to BITS_HALF-1) ); 
     end component;
         
 begin
@@ -71,7 +72,9 @@ begin
     --
     --    RSer -->  | Q7  | Q6  | Q5  | Q4  || Q3  | Q2  | Q1  | Q0  |  <-- LSer
     --              | DO0 | DO1 | DO2 | DO3 || DO0 | DO1 | DO2 | DO3 |
+    --              |                       ||                       |
     --              | DI0 | DI1 | DI2 | DI3 || DI0 | DI1 | DI2 | DI3 |   
+    --
     --              |       Left 74194      ||      Right 74194      |
     --
     -- Component instantiation for 74194 on the left
