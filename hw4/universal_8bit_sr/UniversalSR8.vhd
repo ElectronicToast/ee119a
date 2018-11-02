@@ -58,13 +58,13 @@ architecture Structural of UniversalSR8 is
 
     -- Component declaration for the two 74xx194 4-bit SRs
     component ic74194 port(
-        CLR:    in      std_logic;
+        CLR:    in      std_logic;                                  -- Clear
         S:      in      std_logic_vector (SEL_BITS-1 downto 0);     -- (S1, S0)
-        CLK:    in      std_logic;
-        LSI:    in      std_logic;
-        RSI:    in      std_logic;
-        DO:     buffer  std_logic_vector (0 to BITS_HALF-1);   
-        DI:     in      std_logic_vector (0 to BITS_HALF-1) ); 
+        CLK:    in      std_logic;                                  -- Clock
+        LSI:    in      std_logic;                                  -- L Ser In
+        RSI:    in      std_logic;                                  -- R Ser In
+        DO:     buffer  std_logic_vector (0 to BITS_HALF-1);        -- Parallel
+        DI:     in      std_logic_vector (0 to BITS_HALF-1) );      -- Qs
     end component;
         
 begin

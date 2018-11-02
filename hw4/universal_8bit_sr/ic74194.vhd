@@ -37,9 +37,9 @@ entity ic74194 is
         BITS: 	        integer := 4;                   -- # bits in the SR
         SEL_BITS:       integer := 2 );                 -- # select lines
     port(
-        CLR:    in      std_logic;
+        CLR:    in      std_logic;                      -- Asynch. clear
         S:      in      std_logic_vector (SEL_BITS-1 downto 0);     -- (S1, S0)
-        CLK:    in      std_logic;
+        CLK:    in      std_logic;                      -- Clock
         LSI:    in      std_logic;                      -- Serial in, left
         RSI:    in      std_logic;                      -- and right
         -- Map (A, B, C, D) as (0 to 3) for the parallel inputs `DI`
