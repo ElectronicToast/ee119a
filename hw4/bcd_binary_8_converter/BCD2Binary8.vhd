@@ -58,12 +58,12 @@ end entity;
 architecture DataFlow of BCD2Binary8 is
 
     -- Number of bits in a nibble (one BCD digit)
-    constant    BITS_NIBBLE: integer := 4;
+    constant    BITS_NIB: integer := 4;
     
     -- Signals for the binary representations of the upper and lower nibbles
     -- in unsigned type
     signal      Bin_nib_h:  unsigned (BITS-1 downto 0);
-    signal      Bin_nib_l:  unsigned (BITS_NIBBLE-1 downto 0);
+    signal      Bin_nib_l:  unsigned (BITS_NIB-1 downto 0);
     
     -- The high nibble of the input, extended to BITS-bits
     signal      Bcd_nib_h:  unsigned (BITS-1 downto 0);
@@ -71,13 +71,13 @@ architecture DataFlow of BCD2Binary8 is
 begin
 
     -- The lower nibble is already in binary (ranges from 0 to 9 in binary)
-    Bin_nib_l <= unsigned(BCD(BITS_NIBBLE-1 downto 0));
+    Bin_nib_l <= unsigned(BCD(BITS_NIB-1 downto 0));
     
     -- The upper nibble (0 to 9) represents 10 times the value of the nibble 
     -- in decimal
     --      Use bit-shifts (10x = 8x + 2x)
     -- Intermediate signal: "0000" & high nibble 
-    Bcd_nib_h <= resize(unsigned(BCD(BITS-1 downto BITS_NIBBLE)), BITS);
+    Bcd_nib_h <= resize(unsigned(BCD(BITS-1 downto BITS_NIB)), BITS);
     Bin_nib_h <= (Bcd_nib_h sll 3) + (Bcd_nib_h sll 1);
     
     -- The binary output is the sum of the converted binary nibbles
