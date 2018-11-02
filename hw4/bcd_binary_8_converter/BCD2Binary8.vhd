@@ -41,9 +41,7 @@ entity BCD2Binary8 is
 
     generic (
         -- Non-synthesized constant for the number of bits in the converter
-        BITS:       integer := 8;
-        -- Number of bits in a nibble (one BCD digit)
-        BITS_NIB:   integer := 4 );
+        BITS:       integer := 8 );
     port (
         -- BCD input and binary output are SLVs of length `BITS`
         BCD:    in  std_logic_vector (BITS-1 downto 0);
@@ -58,6 +56,9 @@ end entity;
 
 
 architecture DataFlow of BCD2Binary8 is
+
+    -- Number of bits in a nibble (one BCD digit)
+    constant    BITS_NIB:   integer := 4;
     
     -- Signals for the binary representations of the upper and lower nibbles
     -- in unsigned type
