@@ -53,9 +53,9 @@ end entity;
 
 architecture DataFlow of ic74194 is
 begin
-    process (CLK, CLR, S)
+    process (CLK, CLR)
     begin 
-        -- If `Clear` is low, clear the shift register outputs
+        -- If `CLR` is low, clear the shift register outputs
         if CLR = '0' then
             DO <= "0000";
         elsif rising_edge(CLK) then 
