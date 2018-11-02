@@ -40,7 +40,7 @@ use ieee.numeric_std.all;
 entity BCD2Binary8 is 
 
     generic (
-        -- Non-synthesized constant for the number of bits in the converter
+        -- Constant for the number of bits in the converter
         BITS:       integer := 8 );
     port (
         -- BCD input and binary output are SLVs of length `BITS`
