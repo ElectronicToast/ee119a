@@ -9,6 +9,24 @@
 --
 --      This is the non-extra-credit implementation.
 --
+-- File organization:
+--      Entity          Architecture        Description
+--      ------------------------------------------------------------------------
+--      AudioPlayer     DataFlow            Top-level module of PWM Audio Player 
+--      SysCounter      DataFlow            System counter, 12-bit up counter 
+--                                          with synchronous reset.
+--      PlayerFsm       Structural          Mealy FSM for button reading and
+--                                          handling state transitions.
+--      AddrSel         DataFlow            Address selector module that 
+--                                          implements pipelining; outputs 
+--                                          correct address and registers 
+--                                          PWM data to/from EPROM.
+--      PwmComparator   DataFlow            PWM output module.
+--
+--      Package                 Description
+--      ------------------------------------------------------------------------
+--      AudioPlayerConfig       A library of constants for the audio player.
+--
 -- Table of Contents:
 --      entity          AudioPlayer
 --          inputs      Clock      SL   System clock 

@@ -14,6 +14,22 @@
 --      constants used from that library to the respective files in which 
 --      they are used. They are demarcated with --########-- comment lines.
 --      Generic constants are placed in entity declarations as appropriate.
+--      This version of the code was used when demoing and is identical to 
+--      the main version except in the declaration of constants.
+--
+-- File organization:
+--      Entity          Architecture        Description
+--      ------------------------------------------------------------------------
+--      AudioPlayer     DataFlow            Top-level module of PWM Audio Player 
+--      SysCounter      DataFlow            System counter, 12-bit up counter 
+--                                          with synchronous reset.
+--      PlayerFsm       Structural          Mealy FSM for button reading and
+--                                          handling state transitions.
+--      AddrSel         DataFlow            Address selector module that 
+--                                          implements pipelining; outputs 
+--                                          correct address and registers 
+--                                          PWM data to/from EPROM.
+--      PwmComparator   DataFlow            PWM output module.
 --
 -- Table of Contents:
 --      entity          AudioPlayer
