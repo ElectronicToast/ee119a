@@ -56,12 +56,14 @@ begin
     -- Counter process
     process (Clock)
     begin
-        -- If the reset is active, reset the count
-        if Reset = SL_TRUE then 
-            Count <= CNTR_BOTTOM;
-        elsif rising_edge(Clock) then
-            -- Increment (and overflow back to 0 if at top value)
-            Count <= std_logic_vector(unsigned(Count) + 1);
+        if rising_edge(Clock) then
+            -- If the reset is active, reset the count
+            if Reset = SL_TRUE then 
+                Count <= CNTR_BOTTOM;
+            -- Otherwise ncrement (and overflow back to 0 if at top value)
+            else
+                Count <= std_logic_vector(unsigned(Count) + 1);
+            end if;
         end if;
         -- Otherwise implicitly latch the count
     end process;
