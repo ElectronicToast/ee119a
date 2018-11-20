@@ -1,6 +1,0 @@
-vhdl work "SysLfsr.vhd"
-vhdl work "SysCounter.vhd"
-vhdl work "PwmComparator.vhd"
-vhdl work "PlayerFsm.vhd"
-vhdl work "AddrSelect.vhd"
-vhdl work "AudioPlayer.vhd"
