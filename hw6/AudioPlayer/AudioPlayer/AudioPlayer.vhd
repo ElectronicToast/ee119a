@@ -221,8 +221,8 @@ begin
                 Switch3        => Switch3,
                 Switch2        => Switch2,
                 Switch1        => Switch1,
-                MsgDone        => MsgDone,
-                MsgEnable      => MsgEnable,
+                MsgDone        => msgDone,
+                MsgEnable      => msgEnable,
                 MsgStartAddr   => startAddr,
                 MsgEndAddr     => endAddr
                 );
