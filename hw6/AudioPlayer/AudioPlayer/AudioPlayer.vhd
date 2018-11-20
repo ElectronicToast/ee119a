@@ -64,6 +64,13 @@
 --      - Due to the synchronous design of the address select module and the 
 --        PWM output, the first PWM wave high time after the next address is 
 --        read lags by one clock.
+--      - I could not get this to fit on the Lattice ISPLSI1016PGA.
+--      - Xilinx ISE seems to not like dealing with package libraries when
+--        using the PACE pin assignment tool. So I have attached a "demo
+--        version" of the code, where all the constants in the 
+--        `AudioPlayerConfig` package are defined as GENERICs in entity 
+--        declarations or CONSTANTS in architectures. The demo version is 
+--        identical to this version in the VHDL entities and architectures.
 --
 -- Revision History:
 --      11/14/2018      Ray Sun         Initial revision.
@@ -80,6 +87,8 @@
 --      11/18/2018      Ray Sun         Verified playing dummy messages with 
 --                                      ModelSim-Altera.
 --      11/19/2018      Ray Sun         Updated documentation.
+--      11/19/2018      Ray Sun         Verified functionality with the demo 
+--                                      version on board.
 --------------------------------------------------------------------------------
 
 

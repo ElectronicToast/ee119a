@@ -91,7 +91,7 @@ end entity;
 
 
 architecture DataFlow of AddrSelect is 
-    constant    ADDR_MUX_SIZE: integer := 2;    -- Number of select lines in MUX
+    constant    N_ADDR_MUX_SEL: integer := 2;   -- Number of select lines in MUX
     
     -- Internal signal for the incremented value of the current address
     signal  nextAddr:   std_logic_vector(N_ADDR_BITS-1 downto 0);
@@ -101,7 +101,7 @@ architecture DataFlow of AddrSelect is
     signal  newAddr:    std_logic_vector(N_ADDR_BITS-1 downto 0);
     
     -- EPROM address MUX select lines
-    signal  addrMuxSel: std_logic_vector(ADDR_MUX_SIZE-1 downto 0);
+    signal  addrMuxSel: std_logic_vector(N_ADDR_MUX_SEL-1 downto 0);
     
 begin
     -- The next address is one plus the current address

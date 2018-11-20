@@ -86,6 +86,7 @@
 --      11/18/2018      Ray Sun         Verified playing dummy messages with 
 --                                      ModelSim-Altera.
 --      11/19/2018      Ray Sun         Updated documentation.
+--      11/19/2018      Ray Sun         Split off from non-demo-version.
 --------------------------------------------------------------------------------
 
 
