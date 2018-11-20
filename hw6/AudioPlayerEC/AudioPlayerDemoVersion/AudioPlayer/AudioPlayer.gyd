@@ -1,0 +1,60 @@
+Pin Freeze File:  version K.39
+
+957244 XC9572-7-PC44
+AudioData<0> S:PIN22
+AudioData<1> S:PIN20
+AudioData<2> S:PIN19
+AudioData<3> S:PIN18
+AudioData<4> S:PIN14
+AudioData<5> S:PIN13
+AudioData<6> S:PIN12
+AudioData<7> S:PIN11
+Clock S:PIN7
+Switch1 S:PIN5
+Switch2 S:PIN39
+AudioAddr<0> S:PIN25
+AudioAddr<10> S:PIN38
+AudioAddr<11> S:PIN43
+AudioAddr<12> S:PIN44
+AudioAddr<13> S:PIN1
+AudioAddr<14> S:PIN2
+AudioAddr<15> S:PIN3
+AudioAddr<16> S:PIN4
+AudioAddr<17> S:PIN8
+AudioAddr<18> S:PIN9
+AudioAddr<1> S:PIN26
+AudioAddr<2> S:PIN27
+AudioAddr<3> S:PIN28
+AudioAddr<4> S:PIN29
+AudioAddr<5> S:PIN33
+AudioAddr<6> S:PIN34
+AudioAddr<7> S:PIN35
+AudioAddr<8> S:PIN36
+AudioAddr<9> S:PIN37
+PWMOut S:PIN24
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_1 msgLfsrEn AudioAddr_13_OBUF count<9> count<8>
+		 AudioAddr_14_OBUF AudioAddr_15_OBUF count<7> AudioAddr_16_OBUF
+		 count<6> count<5> count<4> count<3>
+		 count<2> count<11> AudioAddr_17_OBUF count<10>
+		 AudioAddr_18_OBUF Fsm/currState_FFd1
+PARTITION FB2_2 AudioAddr_7_OBUF
+PARTITION FB2_5 AudioAddr_8_OBUF AudioAddr_9_OBUF
+PARTITION FB2_8 AudioAddr_10_OBUF
+PARTITION FB2_14 pwmData<1> AudioAddr_11_OBUF pwmData<0> AudioAddr_12_OBUF
+		 $OpTx$FX_DC$41
+PARTITION FB3_1 EXP0_ lfsrVal<0> EXP1_
+PARTITION FB3_6 msgEnable pwmData<7> pwmData<4> pwmData<3>
+		 pwmData<2> lfsrVal<5> lfsrVal<4> lfsrVal<3>
+		 lfsrVal<2> lfsrVal<1> $OpTx$FX_DC$40 EXP2_
+		 Comp/Mcompar_PWMOut_cmp_lt0001_ALB34/Comp/Mcompar_PWMOut_cmp_lt0001_ALB34_D2
+PARTITION FB4_1 Comp/Mcompar_PWMOut_cmp_lt0000_ALB34/Comp/Mcompar_PWMOut_cmp_lt0000_ALB34_D2 PWMOut_OBUF EXP3_ EXP4_
+		 AudioAddr_0_OBUF count<0> count<1> AudioAddr_1_OBUF
+		 AudioAddr_2_OBUF pwmData<6> AudioAddr_3_OBUF pwmData<5>
+		 lfsrVal<7> AudioAddr_4_OBUF AudioAddr_5_OBUF lfsrVal<6>
+		 AudioAddr_6_OBUF EXP5_
+

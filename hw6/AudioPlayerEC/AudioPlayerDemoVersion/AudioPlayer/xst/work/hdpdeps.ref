@@ -1,0 +1,48 @@
+V3 28
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AddrSelect.vhd 2018/11/20.00:07:30 K.39
+EN work/AddrSelect 1542705714 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AddrSelect.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/AddrSelect/DataFlow 1542705715 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AddrSelect.vhd \
+      EN work/AddrSelect 1542705714
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd 2018/11/20.00:54:42 K.39
+EN work/AudioPlayer 1542705718 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/AudioPlayer/DataFlow 1542705719 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd \
+      EN work/AudioPlayer 1542705718 CP PlayerFsm CP SysCounter CP SysLfsr \
+      CP AddrSelect CP PwmComparator
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PlayerFsm.vhd 2018/11/20.00:14:20 K.39
+EN work/PlayerFsm 1542705708 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PlayerFsm.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/PlayerFsm/Structural 1542705709 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PlayerFsm.vhd \
+      EN work/PlayerFsm 1542705708
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PwmComparator.vhd 2018/11/20.00:08:00 K.39
+EN work/PwmComparator 1542705716 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PwmComparator.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/PwmComparator/DataFlow 1542705717 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PwmComparator.vhd \
+      EN work/PwmComparator 1542705716
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysCounter.vhd 2018/11/20.00:54:06 K.39
+EN work/SysCounter 1542705710 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysCounter.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/SysCounter/DataFlow 1542705711 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysCounter.vhd \
+      EN work/SysCounter 1542705710
+FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysLfsr.vhd 2018/11/20.01:21:44 K.39
+EN work/SysLfsr 1542705712 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysLfsr.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/SysLfsr/DataFlow 1542705713 \
+      FL E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysLfsr.vhd EN work/SysLfsr 1542705712
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd 2018/11/19.18:14:34 K.39
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd 2018/11/19.18:16:04 K.39
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd 2018/11/19.18:12:04 K.39
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd 2018/11/19.18:14:00 K.39
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd 2018/11/19.18:13:48 K.39

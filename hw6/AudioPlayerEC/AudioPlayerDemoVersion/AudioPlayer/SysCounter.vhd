@@ -5,7 +5,7 @@
 -- Description:
 --      This VHDL file contains an entity `SysCounter` with architecture 
 --      `DataFlow` that implements a 12-bit counter for generating an 
---      oversampled PWM output.
+--      non-oversampled PWM output.
 --
 --      Submission for EE 119a Homework 6.
 --
@@ -38,7 +38,7 @@ use ieee.numeric_std.all;
 
 entity SysCounter is 
     generic(
-        CNTR_SIZE:          integer := 12
+        CNTR_SIZE:          integer := 12   -- # bits in the counter
     );
     port(
         --------------------------- INPUTS -------------------------------------
@@ -56,23 +56,23 @@ end entity;
 
 architecture DataFlow of SysCounter is 
     --####################### SHARED COONSTANTS ##############################--
-    constant CNTR_BOTTOM:   
+    constant    CNTR_BOTTOM:   
         std_logic_vector(CNTR_SIZE-1 downto 0)  := x"000";  -- Bottom of range
-    constant    SL_TRUE:    std_logic := '1';   -- true and false for a 
-    constant    SL_FALSE:   std_logic := '0';   -- std_logic used as a Boolean
+    constant    SL_TRUE:    std_logic := '1';   -- true value for a SL boolean
     --########################################################################--
 begin 
+    -- Counter process
     process (Clock)
     begin
+        -- If the reset is active, reset the count to bottom value
         if rising_edge(Clock) then
-            -- If the reset is active, reset the count
-            if Reset = SL_TRUE then 
+			if Reset = SL_TRUE then 
                 Count <= CNTR_BOTTOM;
-            -- Otherwise ncrement (and overflow back to 0 if at top value)
-            else
+			  else
+                    -- Increment (and overflow back to 0 if at top value)
                 Count <= std_logic_vector(unsigned(Count) + 1);
-            end if;
-        end if;
+			  end if;
+		  end if;
         -- Otherwise implicitly latch the count
     end process;
 end architecture;

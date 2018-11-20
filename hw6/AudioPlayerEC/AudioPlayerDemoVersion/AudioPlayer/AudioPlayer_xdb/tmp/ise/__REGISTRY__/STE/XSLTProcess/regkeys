@@ -1,0 +1,6 @@
+CommandLine
+C:\Program Files\Xilinx\10.1\ISE\bin\nt\unwrapped\XSLTProcess.exe -ise E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.ise AudioPlayer_build.xml
+s
+FormatString
+xsltprocess [--intstyle ise|xflow|silent] <xmlfile> [-a] [-w] [--libxslt <limit:-1,10>] 
+s

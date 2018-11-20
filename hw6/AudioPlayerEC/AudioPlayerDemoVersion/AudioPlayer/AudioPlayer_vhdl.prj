@@ -1,0 +1,6 @@
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\SysLfsr.vhd"
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\SysCounter.vhd"
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\PwmComparator.vhd"
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\PlayerFsm.vhd"
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\AddrSelect.vhd"
+vhdl work "E:\rsun\AudioPlayerECDemoVersion\AudioPlayer\AudioPlayer.vhd"

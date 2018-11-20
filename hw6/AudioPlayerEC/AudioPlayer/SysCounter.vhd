@@ -5,7 +5,7 @@
 -- Description:
 --      This VHDL file contains an entity `SysCounter` with architecture 
 --      `DataFlow` that implements a 12-bit counter for generating an 
---      oversampled PWM output.
+--      non-oversampled PWM output.
 --
 --      Submission for EE 119a Homework 6.
 --
@@ -30,16 +30,13 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
---use work.AudioPlayerConfig.all;
+use work.AudioPlayerConfig.all;
 
 
 --------------------------------------------------------------------------------
 
 
 entity SysCounter is 
-    generic(
-        CNTR_SIZE:          integer := 12
-    );
     port(
         --------------------------- INPUTS -------------------------------------
         Clock:      in      std_logic;      -- System clock 
@@ -55,13 +52,8 @@ end entity;
 
 
 architecture DataFlow of SysCounter is 
-    --####################### SHARED COONSTANTS ##############################--
-    constant CNTR_BOTTOM:   
-        std_logic_vector(CNTR_SIZE-1 downto 0)  := x"000";  -- Bottom of range
-    constant    SL_TRUE:    std_logic := '1';   -- true and false for a 
-    constant    SL_FALSE:   std_logic := '0';   -- std_logic used as a Boolean
-    --########################################################################--
 begin 
+    -- Counter process
     process (Clock)
     begin
         if rising_edge(Clock) then

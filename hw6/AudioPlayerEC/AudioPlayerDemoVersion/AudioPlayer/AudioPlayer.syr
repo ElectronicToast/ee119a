@@ -1,0 +1,346 @@
+Release 10.1 - xst K.39 (nt)
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.05 secs
+ 
+--> Parameter xsthdpdir set to E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.05 secs
+ 
+--> Reading design: AudioPlayer.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "AudioPlayer.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "AudioPlayer"
+Output Format                      : NGC
+Target Device                      : XC9500 CPLDs
+
+---- Source Options
+Top Module Name                    : AudioPlayer
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+Mux Extraction                     : YES
+Resource Sharing                   : YES
+
+---- Target Options
+Add IO Buffers                     : YES
+MACRO Preserve                     : YES
+XOR Preserve                       : YES
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Library Search Order               : AudioPlayer.lso
+Keep Hierarchy                     : YES
+Netlist Hierarchy                  : as_optimized
+RTL Output                         : Yes
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Verilog 2001                       : YES
+
+---- Other Options
+wysiwyg                            : NO
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PlayerFsm.vhd" in Library work.
+Architecture structural of Entity playerfsm is up to date.
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysCounter.vhd" in Library work.
+Architecture dataflow of Entity syscounter is up to date.
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysLfsr.vhd" in Library work.
+Entity <syslfsr> compiled.
+Entity <syslfsr> (Architecture <dataflow>) compiled.
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AddrSelect.vhd" in Library work.
+Architecture dataflow of Entity addrselect is up to date.
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PwmComparator.vhd" in Library work.
+Architecture dataflow of Entity pwmcomparator is up to date.
+Compiling vhdl file "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd" in Library work.
+WARNING:HDLParsers:3555 - "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd" Line 299. Warning for LRM section 1.1.1.2 violation about connectivity rules. Parameter AudioAddr of mode out should not be associated with a formal port of mode buffer.
+Architecture dataflow of Entity audioplayer is up to date.
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for entity <AudioPlayer> in library <work> (architecture <dataflow>).
+
+Analyzing hierarchy for entity <PlayerFsm> in library <work> (architecture <structural>) with generics.
+	N_ADDR_BITS = 19
+
+Analyzing hierarchy for entity <SysCounter> in library <work> (architecture <dataflow>) with generics.
+	CNTR_SIZE = 12
+
+Analyzing hierarchy for entity <SysLfsr> in library <work> (architecture <dataflow>) with generics.
+	LFSR_CNTR_IN_SIZE = 4
+	LFSR_SIZE = 8
+
+Analyzing hierarchy for entity <AddrSelect> in library <work> (architecture <dataflow>) with generics.
+	CNTR_SIZE = 12
+	N_ADDR_BITS = 19
+	N_DATA_BITS = 8
+
+Analyzing hierarchy for entity <PwmComparator> in library <work> (architecture <dataflow>) with generics.
+	N_DATA_BITS = 8
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing Entity <AudioPlayer> in library <work> (Architecture <dataflow>).
+INFO:Xst:1739 - HDL ADVISOR - "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd" line 49: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
+INFO:Xst:1739 - HDL ADVISOR - "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd" line 67: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
+INFO:Xst:1739 - HDL ADVISOR - "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd" line 89: declaration of a buffer port will make it difficult for you to validate this design by simulation. It is preferable to declare it as output.
+Entity <AudioPlayer> analyzed. Unit <AudioPlayer> generated.
+
+Analyzing generic Entity <PlayerFsm> in library <work> (Architecture <structural>).
+	N_ADDR_BITS = 19
+Entity <PlayerFsm> analyzed. Unit <PlayerFsm> generated.
+
+Analyzing generic Entity <SysCounter> in library <work> (Architecture <dataflow>).
+	CNTR_SIZE = 12
+Entity <SysCounter> analyzed. Unit <SysCounter> generated.
+
+Analyzing generic Entity <SysLfsr> in library <work> (Architecture <dataflow>).
+	LFSR_CNTR_IN_SIZE = 4
+	LFSR_SIZE = 8
+Entity <SysLfsr> analyzed. Unit <SysLfsr> generated.
+
+Analyzing generic Entity <AddrSelect> in library <work> (Architecture <dataflow>).
+	CNTR_SIZE = 12
+	N_ADDR_BITS = 19
+	N_DATA_BITS = 8
+Entity <AddrSelect> analyzed. Unit <AddrSelect> generated.
+
+Analyzing generic Entity <PwmComparator> in library <work> (Architecture <dataflow>).
+	N_DATA_BITS = 8
+Entity <PwmComparator> analyzed. Unit <PwmComparator> generated.
+
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <PlayerFsm>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PlayerFsm.vhd".
+WARNING:Xst:647 - Input <Switch3> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <Switch4> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found finite state machine <FSM_0> for signal <currState>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 7                                              |
+    | Inputs             | 3                                              |
+    | Outputs            | 20                                             |
+    | Clock              | Clock (rising_edge)                            |
+    | Power Up State     | idle                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <MsgEnable>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 D-type flip-flop(s).
+Unit <PlayerFsm> synthesized.
+
+
+Synthesizing Unit <SysCounter>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysCounter.vhd".
+    Found 12-bit up counter for signal <Count>.
+    Summary:
+	inferred   1 Counter(s).
+Unit <SysCounter> synthesized.
+
+
+Synthesizing Unit <SysLfsr>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/SysLfsr.vhd".
+    Found 8-bit register for signal <LfsrCount>.
+    Found 1-bit xor4 for signal <nextLfsrCount<0>>.
+Unit <SysLfsr> synthesized.
+
+
+Synthesizing Unit <AddrSelect>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AddrSelect.vhd".
+    Found 8-bit register for signal <PWMData>.
+    Found 19-bit register for signal <CurrAddr>.
+    Found 19-bit adder for signal <CurrAddr$addsub0000> created at line 128.
+    Found 19-bit comparator equal for signal <MsgDone$cmp_eq0000> created at line 171.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <AddrSelect> synthesized.
+
+
+Synthesizing Unit <PwmComparator>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/PwmComparator.vhd".
+    Found 1-bit register for signal <PWMOut>.
+    Found 8-bit comparator less for signal <PWMOut$cmp_lt0000> created at line 80.
+    Found 8-bit comparator less for signal <PWMOut$cmp_lt0001> created at line 89.
+    Summary:
+	inferred   1 D-type flip-flop(s).
+	inferred   2 Comparator(s).
+Unit <PwmComparator> synthesized.
+
+
+Synthesizing Unit <AudioPlayer>.
+    Related source file is "E:/rsun/AudioPlayerECDemoVersion/AudioPlayer/AudioPlayer.vhd".
+Unit <AudioPlayer> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 1
+ 19-bit adder                                          : 1
+# Counters                                             : 1
+ 12-bit up counter                                     : 1
+# Registers                                            : 5
+ 1-bit register                                        : 2
+ 19-bit register                                       : 1
+ 8-bit register                                        : 2
+# Comparators                                          : 3
+ 19-bit comparator equal                               : 1
+ 8-bit comparator less                                 : 2
+# Xors                                                 : 1
+ 1-bit xor4                                            : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <Fsm/currState> on signal <currState[1:2]> with sequential encoding.
+-------------------------
+ State       | Encoding
+-------------------------
+ idle        | 00
+ pl_nos      | 10
+ pl_nos_lfsr | 01
+-------------------------
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 1
+ 19-bit adder                                          : 1
+# Counters                                             : 1
+ 12-bit up counter                                     : 1
+# Registers                                            : 23
+ Flip-Flops                                            : 23
+# Comparators                                          : 1
+ 19-bit comparator equal                               : 1
+# Xors                                                 : 1
+ 1-bit xor4                                            : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <AudioPlayer> ...
+
+Optimizing unit <PlayerFsm> ...
+  implementation constraint: INIT=r	 : currState_FFd1
+  implementation constraint: INIT=r	 : currState_FFd2
+
+Optimizing unit <PwmComparator> ...
+
+Optimizing unit <SysLfsr> ...
+
+Optimizing unit <AddrSelect> ...
+
+Optimizing unit <SysCounter> ...
+
+=========================================================================
+*                           Partition Report                             *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : AudioPlayer.ngr
+Top Level Output File Name         : AudioPlayer
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : YES
+Target Technology                  : XC9500 CPLDs
+Macro Preserve                     : YES
+XOR Preserve                       : YES
+wysiwyg                            : NO
+
+Design Statistics
+# IOs                              : 33
+
+Cell Usage :
+# BELS                             : 423
+#      AND2                        : 166
+#      AND3                        : 9
+#      AND4                        : 3
+#      AND8                        : 3
+#      INV                         : 114
+#      OR2                         : 74
+#      OR4                         : 2
+#      XOR2                        : 52
+# FlipFlops/Latches                : 51
+#      FD                          : 51
+# IO Buffers                       : 31
+#      IBUF                        : 11
+#      OBUF                        : 20
+=========================================================================
+
+
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 1.87 secs
+ 
+--> 
+
+Total memory usage is 114572 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    3 (   0 filtered)
+Number of infos    :    3 (   0 filtered)
+
