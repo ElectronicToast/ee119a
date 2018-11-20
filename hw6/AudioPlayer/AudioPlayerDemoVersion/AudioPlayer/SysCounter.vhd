@@ -4,7 +4,8 @@
 --
 -- Description:
 --      This VHDL file contains an entity `SysCounter` with architecture 
---      `DataFlow` that implements a 12-bit counter for 
+--      `DataFlow` that implements a 12-bit counter for generating an 
+--      oversampled PWM output.
 --
 --      Submission for EE 119a Homework 6.
 --
