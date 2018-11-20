@@ -1,0 +1,457 @@
+<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>
+<h3 align='center'>Equations</h3>
+<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>
+<tr><td>
+</td></tr><tr><td>
+********** Mapped Logic **********
+</td></tr><tr><td>
+FTCPE_AudioAddr0: FTCPE port map (AudioAddr(0),AudioAddr_T(0),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(0) <= ((NOT msgEnable AND AudioAddr_0_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable));
+</td></tr><tr><td>
+FTCPE_AudioAddr1: FTCPE port map (AudioAddr(1),AudioAddr_T(1),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(1) <= ((NOT msgEnable AND AudioAddr_1_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr2: FTCPE port map (AudioAddr(2),AudioAddr_T(2),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(2) <= ((NOT msgEnable AND AudioAddr_2_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK AND AudioAddr_1_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr3: FTCPE port map (AudioAddr(3),AudioAddr_T(3),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(3) <= ((NOT msgEnable AND AudioAddr_3_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK AND AudioAddr_1_OBUF.LFBK AND AudioAddr_2_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr4: FTCPE port map (AudioAddr(4),AudioAddr_T(4),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(4) <= ((NOT msgEnable AND AudioAddr_4_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK AND AudioAddr_1_OBUF.LFBK AND AudioAddr_2_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_3_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr5: FTCPE port map (AudioAddr(5),AudioAddr_T(5),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(5) <= ((NOT msgEnable AND AudioAddr_5_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK AND AudioAddr_1_OBUF.LFBK AND AudioAddr_2_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_3_OBUF.LFBK AND AudioAddr_4_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr6: FTCPE port map (AudioAddr(6),AudioAddr_T(6),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(6) <= ((pwmData(2).EXP)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_0_OBUF.LFBK AND AudioAddr_1_OBUF.LFBK AND AudioAddr_2_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_3_OBUF.LFBK AND AudioAddr_4_OBUF.LFBK AND AudioAddr_5_OBUF.LFBK));
+</td></tr><tr><td>
+FTCPE_AudioAddr7: FTCPE port map (AudioAddr(7),AudioAddr_T(7),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(7) <= ((NOT msgEnable AND AudioAddr_7_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(0).PIN AND AudioAddr(1).PIN AND AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(3).PIN AND AudioAddr(4).PIN AND AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr8: FTCPE port map (AudioAddr(8),AudioAddr_T(8),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(8) <= ((NOT msgEnable AND AudioAddr_8_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_7_OBUF.LFBK AND AudioAddr(0).PIN AND AudioAddr(1).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(2).PIN AND AudioAddr(3).PIN AND AudioAddr(4).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(5).PIN AND AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr9: FTCPE port map (AudioAddr(9),AudioAddr_T(9),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(9) <= ((NOT msgEnable AND AudioAddr_9_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_7_OBUF.LFBK AND AudioAddr_8_OBUF.LFBK AND AudioAddr(0).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(1).PIN AND AudioAddr(2).PIN AND AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(4).PIN AND AudioAddr(5).PIN AND AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr10: FTCPE port map (AudioAddr(10),AudioAddr_T(10),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(10) <= ((NOT msgEnable AND AudioAddr_10_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_7_OBUF.LFBK AND AudioAddr_8_OBUF.LFBK AND AudioAddr_9_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(0).PIN AND AudioAddr(1).PIN AND AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(3).PIN AND AudioAddr(4).PIN AND AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr11: FTCPE port map (AudioAddr(11),AudioAddr_T(11),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(11) <= ((NOT msgEnable AND AudioAddr_11_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_7_OBUF.LFBK AND AudioAddr_8_OBUF.LFBK AND AudioAddr_9_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_10_OBUF.LFBK AND AudioAddr(0).PIN AND AudioAddr(1).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(2).PIN AND AudioAddr(3).PIN AND AudioAddr(4).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(5).PIN AND AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr12: FTCPE port map (AudioAddr(12),AudioAddr_T(12),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(12) <= ((NOT msgEnable AND AudioAddr_12_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_7_OBUF.LFBK AND AudioAddr_8_OBUF.LFBK AND AudioAddr_9_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_10_OBUF.LFBK AND AudioAddr_11_OBUF.LFBK AND AudioAddr(0).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(1).PIN AND AudioAddr(2).PIN AND AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(4).PIN AND AudioAddr(5).PIN AND AudioAddr(6).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr13: FTCPE port map (AudioAddr(13),AudioAddr_T(13),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(13) <= ((NOT msgEnable AND AudioAddr_13_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr(0).PIN AND AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(11).PIN AND AudioAddr(12).PIN AND AudioAddr(1).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(2).PIN AND AudioAddr(3).PIN AND AudioAddr(4).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(5).PIN AND AudioAddr(6).PIN AND AudioAddr(7).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(8).PIN AND AudioAddr(9).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr14: FTCPE port map (AudioAddr(14),AudioAddr_T(14),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(14) <= ((NOT msgEnable AND startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_14_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_14_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr_13_OBUF.LFBK AND AudioAddr(0).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(10).PIN AND AudioAddr(11).PIN AND AudioAddr(12).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(1).PIN AND AudioAddr(2).PIN AND AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(4).PIN AND AudioAddr(5).PIN AND AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(7).PIN AND AudioAddr(8).PIN AND AudioAddr(9).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr15: FTCPE port map (AudioAddr(15),AudioAddr_T(15),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(15) <= ((NOT msgEnable AND endAddr(16) AND NOT AudioAddr_15_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_15_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT endAddr(16) AND NOT startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_15_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr_13_OBUF.LFBK AND AudioAddr_14_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(0).PIN AND AudioAddr(10).PIN AND AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(12).PIN AND AudioAddr(1).PIN AND AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(3).PIN AND AudioAddr(4).PIN AND AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(6).PIN AND AudioAddr(7).PIN AND AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(9).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr16: FTCPE port map (AudioAddr(16),AudioAddr_T(16),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(16) <= ((NOT msgEnable AND startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_16_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND endAddr(16) AND Fsm/currState_FFd3 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_16_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT endAddr(16) AND NOT startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_16_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT startAddr(14) AND NOT Fsm/currState_FFd3 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_16_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr_13_OBUF.LFBK AND AudioAddr_14_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_15_OBUF.LFBK AND AudioAddr(0).PIN AND AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(11).PIN AND AudioAddr(12).PIN AND AudioAddr(1).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(2).PIN AND AudioAddr(3).PIN AND AudioAddr(4).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(5).PIN AND AudioAddr(6).PIN AND AudioAddr(7).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(8).PIN AND AudioAddr(9).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr17: FTCPE port map (AudioAddr(17),AudioAddr_T(17),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(17) <= ((NOT msgEnable AND startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_17_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_17_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr_13_OBUF.LFBK AND AudioAddr_14_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_15_OBUF.LFBK AND AudioAddr_16_OBUF.LFBK AND AudioAddr(0).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(10).PIN AND AudioAddr(11).PIN AND AudioAddr(12).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(1).PIN AND AudioAddr(2).PIN AND AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(4).PIN AND AudioAddr(5).PIN AND AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(7).PIN AND AudioAddr(8).PIN AND AudioAddr(9).PIN));
+</td></tr><tr><td>
+FTCPE_AudioAddr18: FTCPE port map (AudioAddr(18),AudioAddr_T(18),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AudioAddr_T(18) <= ((NOT msgEnable AND endAddr(16) AND NOT AudioAddr_18_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_18_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND Fsm/currState_FFd3 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr_18_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT msgEnable AND NOT endAddr(16) AND NOT startAddr(14) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Fsm/currState_FFd3 AND AudioAddr_18_OBUF.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(0) AND count(1) AND msgEnable AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11).LFBK AND AudioAddr_13_OBUF.LFBK AND AudioAddr_14_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr_15_OBUF.LFBK AND AudioAddr_16_OBUF.LFBK AND AudioAddr_17_OBUF.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(0).PIN AND AudioAddr(10).PIN AND AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(12).PIN AND AudioAddr(1).PIN AND AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(3).PIN AND AudioAddr(4).PIN AND AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(6).PIN AND AudioAddr(7).PIN AND AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(9).PIN));
+</td></tr><tr><td>
+</td></tr><tr><td>
+Comp/Mcompar_PWMOut_cmp_lt0000_ALB34/Comp/Mcompar_PWMOut_cmp_lt0000_ALB34_D2 <= ((PWMOut_OBUF.EXP)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (EXP2_.EXP)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT count(4) AND pwmData(4).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT count(6) AND pwmData(6).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT count(7) AND pwmData(7).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT count(5) AND pwmData(5).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT count(3) AND NOT $OpTx$$OpTx$FX_DC$92_INV$166 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(3).LFBK));
+</td></tr><tr><td>
+</td></tr><tr><td>
+</td></tr><tr><td>
+</td></tr><tr><td>
+</td></tr><tr><td>
+</td></tr><tr><td>
+</td></tr><tr><td>
+FTCPE_Fsm/currState_FFd3: FTCPE port map (Fsm/currState_FFd3,Fsm/currState_FFd3_T,Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fsm/currState_FFd3_T <= ((Switch4 AND NOT endAddr(16).LFBK AND NOT startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Fsm/currState_FFd3.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT Switch3 AND Switch2 AND NOT endAddr(16).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT startAddr(14).LFBK AND NOT Fsm/currState_FFd3.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (endAddr(16).LFBK AND Fsm/currState_FFd3.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND NOT AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND AudioAddr(14).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(15).PIN AND AudioAddr(16).PIN AND AudioAddr(17).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND NOT AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND NOT AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND NOT AudioAddr(9).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(18).PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT endAddr(16).LFBK AND Fsm/currState_FFd3.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND NOT AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND NOT AudioAddr(14).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(15).PIN AND NOT AudioAddr(16).PIN AND NOT AudioAddr(17).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND NOT AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND NOT AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND NOT AudioAddr(9).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(18).PIN));
+</td></tr><tr><td>
+FDCPE_PWMOut: FDCPE port map (PWMOut,EXP0_.EXP,Clock,'0','0');
+</td></tr><tr><td>
+FTCPE_count0: FTCPE port map (count(0),'1',Clock,NOT msgEnable,'0');
+</td></tr><tr><td>
+FTCPE_count1: FTCPE port map (count(1),count(0).LFBK,Clock,NOT msgEnable,'0');
+</td></tr><tr><td>
+FTCPE_count2: FTCPE port map (count(2),count_T(2),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(2) <= (count(0) AND count(1));
+</td></tr><tr><td>
+FTCPE_count3: FTCPE port map (count(3),count_T(3),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(3) <= (count(0) AND count(1) AND count(2).LFBK);
+</td></tr><tr><td>
+FTCPE_count4: FTCPE port map (count(4),count_T(4),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(4) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK);
+</td></tr><tr><td>
+FTCPE_count5: FTCPE port map (count(5),count_T(5),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(5) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK);
+</td></tr><tr><td>
+FTCPE_count6: FTCPE port map (count(6),count_T(6),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(6) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK);
+</td></tr><tr><td>
+FTCPE_count7: FTCPE port map (count(7),count_T(7),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(7) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK);
+</td></tr><tr><td>
+FTCPE_count8: FTCPE port map (count(8),count_T(8),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(8) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK);
+</td></tr><tr><td>
+FTCPE_count9: FTCPE port map (count(9),count_T(9),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(9) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK);
+</td></tr><tr><td>
+FTCPE_count10: FTCPE port map (count(10),count_T(10),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(10) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK);
+</td></tr><tr><td>
+FTCPE_count11: FTCPE port map (count(11),count_T(11),Clock,NOT msgEnable,'0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count_T(11) <= (count(0) AND count(1) AND count(2).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3).LFBK AND count(4).LFBK AND count(5).LFBK AND count(6).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(7).LFBK AND count(8).LFBK AND count(9).LFBK AND count(10).LFBK);
+</td></tr><tr><td>
+FTCPE_endAddr16: FTCPE port map (endAddr(16),endAddr_T(16),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endAddr_T(16) <= ((NOT Switch4 AND Switch3 AND NOT endAddr(16).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT startAddr(14).LFBK AND NOT Fsm/currState_FFd3.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT Switch4 AND Switch2 AND NOT endAddr(16).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT startAddr(14).LFBK AND NOT Fsm/currState_FFd3.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (endAddr(16).LFBK AND Fsm/currState_FFd3.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND NOT AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND AudioAddr(14).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(15).PIN AND AudioAddr(16).PIN AND AudioAddr(17).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND NOT AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND NOT AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND NOT AudioAddr(9).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(18).PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (endAddr(16).LFBK AND NOT Fsm/currState_FFd3.LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND NOT AudioAddr(11).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND NOT AudioAddr(14).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(15).PIN AND AudioAddr(16).PIN AND NOT AudioAddr(17).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND NOT AudioAddr(3).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND NOT AudioAddr(6).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND NOT AudioAddr(9).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(18).PIN));
+</td></tr><tr><td>
+FDCPE_msgEnable: FDCPE port map (msgEnable,msgEnable_D,Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;msgEnable_D <= (NOT endAddr(16).LFBK AND NOT startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Fsm/currState_FFd3.LFBK);
+</td></tr><tr><td>
+FTCPE_pwmData0: FTCPE port map (pwmData(0),pwmData_T(0),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(0) <= ((NOT msgEnable AND pwmData(0).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND NOT AudioData(0) AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(0).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND AudioData(0) AND count(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1).LFBK AND NOT pwmData(0).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData1: FTCPE port map (pwmData(1),pwmData_T(1),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(1) <= ((NOT msgEnable AND pwmData(1).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND NOT AudioData(1) AND count(0).LFBK AND count(1).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(1).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(3) AND count(5) AND count(10) AND count(8) AND count(9) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(11) AND msgEnable AND AudioData(1) AND count(0).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1).LFBK AND NOT pwmData(1).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData2: FTCPE port map (pwmData(2),pwmData_T(2),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(2) <= ((NOT msgEnable AND pwmData(2).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(2).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(2) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(2).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData3: FTCPE port map (pwmData(3),pwmData_T(3),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(3) <= ((NOT msgEnable AND pwmData(3).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(3).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(3) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(3).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData4: FTCPE port map (pwmData(4),pwmData_T(4),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(4) <= ((NOT msgEnable AND pwmData(4).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(4).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(4) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(4).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData5: FTCPE port map (pwmData(5),pwmData_T(5),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(5) <= ((NOT msgEnable AND pwmData(5).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(5).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(5) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(5).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData6: FTCPE port map (pwmData(6),pwmData_T(6),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(6) <= ((NOT msgEnable AND pwmData(6).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(6) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(6).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(6) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(6).LFBK));
+</td></tr><tr><td>
+FTCPE_pwmData7: FTCPE port map (pwmData(7),pwmData_T(7),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pwmData_T(7) <= ((NOT msgEnable AND pwmData(7).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND NOT AudioData(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	pwmData(7).LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (count(4) AND count(6) AND count(7) AND count(0) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(1) AND count(2) AND count(3) AND count(5) AND count(10) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	count(8) AND count(9) AND count(11) AND msgEnable AND AudioData(7) AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT pwmData(7).LFBK));
+</td></tr><tr><td>
+FTCPE_startAddr14: FTCPE port map (startAddr(14),startAddr_T(14),Clock,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;startAddr_T(14) <= ((Switch1 AND NOT Switch4 AND NOT Switch3 AND NOT Switch2 AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT endAddr(16).LFBK AND NOT startAddr(14).LFBK AND NOT Fsm/currState_FFd3.LFBK)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (endAddr(16).LFBK AND startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Fsm/currState_FFd3.LFBK AND NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(11).PIN AND NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(14).PIN AND AudioAddr(15).PIN AND AudioAddr(16).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	AudioAddr(17).PIN AND NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(3).PIN AND NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(6).PIN AND NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(9).PIN AND AudioAddr(18).PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (endAddr(16).LFBK AND startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Fsm/currState_FFd3.LFBK AND NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(11).PIN AND NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(14).PIN AND AudioAddr(15).PIN AND AudioAddr(16).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(17).PIN AND NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(3).PIN AND NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(6).PIN AND NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(9).PIN AND AudioAddr(18).PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT endAddr(16).LFBK AND startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	Fsm/currState_FFd3.LFBK AND NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(11).PIN AND NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(14).PIN AND AudioAddr(15).PIN AND NOT AudioAddr(16).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(17).PIN AND NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(3).PIN AND NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(6).PIN AND NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(9).PIN AND AudioAddr(18).PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT endAddr(16).LFBK AND startAddr(14).LFBK AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT Fsm/currState_FFd3.LFBK AND NOT AudioAddr(0).PIN AND NOT AudioAddr(10).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(11).PIN AND NOT AudioAddr(12).PIN AND NOT AudioAddr(13).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(14).PIN AND NOT AudioAddr(15).PIN AND NOT AudioAddr(16).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(17).PIN AND NOT AudioAddr(1).PIN AND NOT AudioAddr(2).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(3).PIN AND NOT AudioAddr(4).PIN AND NOT AudioAddr(5).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(6).PIN AND NOT AudioAddr(7).PIN AND NOT AudioAddr(8).PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT AudioAddr(9).PIN AND NOT AudioAddr(18).PIN));
+</td></tr><tr><td>
+Register Legend:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDCP  (Q,D,G,CLR,PRE); 
+</td></tr><tr><td>
+</td></tr>
+</table>
+<form><span class="pgRef"><table width="90%" align="center"><tr>
+<td align="left"><input type="button" onclick="javascript:parent.leftnav.showTop()" onmouseover="window.status='goto top of page'; return true;" onmouseout="window.status=''" value="back to top"></td>
+<td align="right"><input type="button" onclick="window.print()" onmouseover="window.status='print page'; return true;" onmouseout="window.status=''" value="print page"></td>
+</tr></table></span></form>
+</body></html>

@@ -1,0 +1,10 @@
+AR addrselect dataflow E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd sub00/vhpl05 1542687272
+AR playerfsm structural E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd sub00/vhpl01 1542687268
+AR audioplayer dataflow E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd sub00/vhpl09 1542687276
+EN pwmcomparator NULL E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd sub00/vhpl06 1542687273
+EN playerfsm NULL E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd sub00/vhpl00 1542687267
+EN syscounter NULL E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd sub00/vhpl02 1542687269
+AR pwmcomparator dataflow E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd sub00/vhpl07 1542687274
+EN addrselect NULL E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd sub00/vhpl04 1542687271
+EN audioplayer NULL E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd sub00/vhpl08 1542687275
+AR syscounter dataflow E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd sub00/vhpl03 1542687270

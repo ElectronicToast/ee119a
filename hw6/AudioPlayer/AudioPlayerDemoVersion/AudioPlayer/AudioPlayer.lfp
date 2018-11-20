@@ -1,0 +1,5 @@
+# begin LFP file E:\rsun\NEW\AudioPlayer\AudioPlayer\AudioPlayer.lfp
+designfile AudioPlayer.vhd
+parttype xc9572-pc44-7
+bus_delimiter 0;
+set_busdelim_onsave 1;

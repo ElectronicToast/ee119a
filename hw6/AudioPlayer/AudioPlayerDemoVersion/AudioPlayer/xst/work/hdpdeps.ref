@@ -1,0 +1,32 @@
+V3 19
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd 2018/11/19.18:14:34 K.39
+EN work/AddrSelect 1542687271 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/AddrSelect/DataFlow 1542687272 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AddrSelect.vhd EN work/AddrSelect 1542687271
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd 2018/11/19.18:16:04 K.39
+EN work/AudioPlayer 1542687275 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/AudioPlayer/DataFlow 1542687276 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/AudioPlayer.vhd EN work/AudioPlayer 1542687275 \
+      CP PlayerFsm CP SysCounter CP AddrSelect CP PwmComparator
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd 2018/11/19.18:12:04 K.39
+EN work/PlayerFsm 1542687267 FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/PlayerFsm/Structural 1542687268 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PlayerFsm.vhd EN work/PlayerFsm 1542687267
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd 2018/11/19.18:14:00 K.39
+EN work/PwmComparator 1542687273 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/PwmComparator/DataFlow 1542687274 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/PwmComparator.vhd \
+      EN work/PwmComparator 1542687273
+FL E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd 2018/11/19.18:13:48 K.39
+EN work/SysCounter 1542687269 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd \
+      PB ieee/std_logic_1164 1217055545 PH ieee/NUMERIC_STD 1217055545
+AR work/SysCounter/DataFlow 1542687270 \
+      FL E:/rsun/NEW/AudioPlayer/AudioPlayer/SysCounter.vhd EN work/SysCounter 1542687269
