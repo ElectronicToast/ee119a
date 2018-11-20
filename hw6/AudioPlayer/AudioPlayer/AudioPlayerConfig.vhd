@@ -5,7 +5,9 @@
 -- Description:
 --      This VHDL file contains a package `AudioPlayerConfig` that defines 
 --      constants for the PWM audio player, such as the number of switches 
---      and the width of the data and address busses.
+--      and the width of the data and address busses. In particular, all 
+--      constants used in entity port declarations and all constants shared
+--      across files are contained here.
 --
 --      Submission for EE 119a Homework 6.
 --
