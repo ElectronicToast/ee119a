@@ -19,6 +19,36 @@
 --      TCK     input   std_logic;     Test Clock input
 --      TDO     output  std_logic      Test Data Output line output
 --
+-- Details:
+--      The `DataFlow` architecture of the `TAPController` entity implements 
+--      a JTAG controller. The JTAG interface is assumed to have one seven-bit 
+--      instruction register and one 32-bit data register, although the lengths
+--      of these registers are generic. The TAP controller controls the 
+--      shifting of data in (via TDI) and out (via TDO) of the two registers.
+--      It is assumed that shifting is done MSB-in, MSB-out.
+--
+--      The TAP controller corresponding to this simplified JTAG interface is
+--      designed with the given 16-state Moore finite state machine. State 
+--      transitions only depend on the TMS input and are synchronous 
+--      with rising edges of TCK. The FSM generates two outputs 
+--      -   A shift enable that is active whenever the system is in one of the 
+--          shifting states and the next state is also that state.
+--      -   A register select signal that is
+--          - high when the FSM state is one of the instruction register 
+--            states (capture, shift, etc.),
+--          - low when the state is one of the data register states,
+--          - undefined ('X') when the state is neither.
+--          In a physical circuit this would correspond to two binary select
+--          lines used to represent three states.
+--      These outputs are used to shift the appropriate register when the 
+--      TAP controller state is the appropriate shifting state. They are also 
+--      used to generate the output TDO, which is the MSB of the instruction
+--      register when the FSM is in one of the instruction states (register 
+--      select high), the MSB of the data register when in one of the data 
+--      states (register select low), or undefined (register select undefined).
+--      This corresponds physically to a 3:1 MUX that selects among the MSBs of 
+--      the two registers and don't-case ('X') for TDO.
+--
 -- Revision History:
 --      11/20/2018      Ray Sun         Initial revision. 
 --      11/20/2018      Ray Sun         Shifting data out appears to be broken 
@@ -29,6 +59,7 @@
 --                                      MUX.
 --      11/21/2018      Ray Sun         Verified functionality with the second
 --                                      version of Glen's testbench.
+--      11/21/2018      Ray Sun         Improved documentation.
 --------------------------------------------------------------------------------
 
 library ieee;                   -- Import the requisite packages
@@ -85,7 +116,7 @@ architecture DataFlow of TAPController is
 begin
 
     ----------------------------------------------------------------------------
-    --                          NEXT STATE PROCESS                            --
+    --                      TAP FSM NEXT STATE PROCESS                        --
     ----------------------------------------------------------------------------
     
     -- All signals used in conditions and assignments in sensitivity list 
@@ -246,7 +277,7 @@ begin
     end process;
     
     ----------------------------------------------------------------------------
-    --                            OUTPUT DECODE                               --
+    --                        TAP FSM OUTPUT DECODE                           --
     ----------------------------------------------------------------------------
     
     -- Combinationally decode outputs 
@@ -275,14 +306,6 @@ begin
                                 or (currState = EX_2_DR  ) 
                                 or (currState = UPDATE_DR)) else
                     'X';
-    --RegSelect <=    SL_LOW   when ((currState = SEL_DR   ) 
-    --                            or (currState = CAP_DR   ) 
-    --                            or (currState = SHIFT_DR ) 
-    --                            or (currState = EX_1_DR  ) 
-    --                            or (currState = PAUSE_DR ) 
-    --                            or (currState = EX_2_DR  ) 
-    --                            or (currState = UPDATE_DR)) else
-    --                SL_HIGH;
     
     ----------------------------------------------------------------------------
     --                        JTAG SHIFTING / OUTPUT                          --
@@ -293,32 +316,16 @@ begin
     ShiftRegs: process (TCK)
     begin 
         if rising_edge(TCK) then 
-            -- If in the shifting DR state, shift the DR left (shift in TDI
-            -- from the right)
-            --if currState = SHIFT_DR and nextState = SHIFT_DR then 
-            --    -- Shift data register left
-            --    dataReg(0) <= TDI;
-            --    for i in 1 to dataReg'left loop 
-            --        dataReg(i) <= dataReg(i-1);
-            --    end loop;
-            ---- If in the shifting IR state, shift the IR
-            --elsif currState = SHIFT_IR and nextState = SHIFT_IR then 
-            --    -- Shift instruction register left
-            --    instReg(0) <= TDI;
-            --    for i in 1 to instReg'left loop 
-            --        instReg(i) <= instReg(i-1);
-            --    end loop;
-            --end if;
-        
-            -- If in the shifting DR state, shift the DR left (shift in TDI
-            -- from the right)
+            -- If in the shifting DR state and also shifting in the next state, 
+            -- shift the DR left (shift in TDI from the right)
             if ShiftEnable = SL_HIGH and RegSelect = SL_LOW then 
                 -- Shift data register left
                 dataReg(0) <= TDI;
                 for i in 1 to dataReg'left loop 
                     dataReg(i) <= dataReg(i-1);
                 end loop;
-            -- If in the shifting IR state, shift the IR
+            -- If in the shifting IR state and also shifting in the next state, 
+            -- shift the IR left (shift in TDI from the right)
             elsif ShiftEnable = SL_HIGH and RegSelect = SL_HIGH then
                 -- Shift instruction register left
                 instReg(0) <= TDI;
@@ -332,12 +339,10 @@ begin
     -- Combinational logic to output TDO - basically a MUX
     --      When in a DR state - is high bit of DR 
     --      When in an IR state - is high bit of IR 
-    --      Otherwise don't care (do not infer a latch)
+    --      Otherwise we don't care - output undefined (do not infer a latch)
     with RegSelect select TDO <=
         instReg(instReg'left) when  SL_HIGH,
         dataReg(dataReg'left) when SL_LOW,
         'X'                   when others;
-    --TDO <= instReg(instReg'left) when RegSelect = SL_HIGH else
-    --       dataReg(dataReg'left) when RegSelect = SL_LOW;
-        
+
 end architecture;
