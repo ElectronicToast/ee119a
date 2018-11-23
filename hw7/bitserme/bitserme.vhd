@@ -282,11 +282,6 @@ architecture DataFlow of BitSerialMultiplier is
     constant    SCA_TOP:        integer := numbits-1;
     constant    SCB_TOP:        integer := numbits;
     constant    SCQ_TOP:        integer := numbits+1;
-    
-    -- Need to shift in carry out one final time when done with multiplication 
-    -- (the last carry when adding the most significant intermediate product in 
-    -- 'grade school'-esque multiplication)
-    constant    SCQ_FINISH:     integer := 1;
     ----------------------------------------------------------------------------
 
     ------------------- FSM STATES + TRANSITION LOGIC --------------------------
@@ -330,13 +325,9 @@ begin
                     nextState <= IDLE;
                 end if;
             when MULTIPLYING =>
-                -- If both A shift counter has reached top, B shift counter 
-                -- has reached top (done multiplying the MSB in the multiplier)
-                -- and Q shift counter is `SCQ_FINISH` (to shift in the carry 
-                -- from the final serial addition), we are done 
-                --if (shiftCountA = SCA_TOP) and (shiftCountB = SCB_TOP) and 
-                --   (shiftCountQ = SCQ_FINISH) then 
-                --if (shiftCountB = SCB_TOP) and (shiftCountQ = SCQ_FINISH) then 
+                -- If the B counter goes beyond the MSB, we are done - have 
+                -- rotated through all bits in A ANDed with MSB of B and 
+                -- have propagated final carry
                 if shiftCountB = SCB_TOP then
                     nextState <= FINISHED;
                 -- Otherwise stay in the multiplying state
