@@ -40,6 +40,7 @@
 --          - undefined ('X') when the state is neither.
 --          In a physical circuit this would correspond to two binary select
 --          lines used to represent three states.
+--
 --      These outputs are used to shift the appropriate register when the 
 --      TAP controller state is the appropriate shifting state. They are also 
 --      used to generate the output TDO, which is the MSB of the instruction
@@ -48,6 +49,11 @@
 --      states (register select low), or undefined (register select undefined).
 --      This corresponds physically to a 3:1 MUX that selects among the MSBs of 
 --      the two registers and don't-case ('X') for TDO.
+--
+-- Implementation Notes:
+--      - The older version of Glen's testbench (the one with two revision 
+--        history comments) was used to validate the functionality of the 
+--        JTAG implementation.
 --
 -- Revision History:
 --      11/20/2018      Ray Sun         Initial revision. 
@@ -60,6 +66,7 @@
 --      11/21/2018      Ray Sun         Verified functionality with the second
 --                                      version of Glen's testbench.
 --      11/21/2018      Ray Sun         Improved documentation.
+--      11/22/2018      Ray Sun         Improved documentation.
 --------------------------------------------------------------------------------
 
 library ieee;                   -- Import the requisite packages

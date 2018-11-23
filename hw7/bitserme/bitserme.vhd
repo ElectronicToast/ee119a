@@ -5,31 +5,181 @@
 -- calculation will take 2n^2 clocks after the START signal is activated.
 -- The multiplier is implemented with a single full adder.
 --
--- Parameters:
+-- Generic Parameters:
 --      numbits - number of bits in the multiplicand and multiplier (n)
 --
 -- Inputs:
---      A       - n-bit unsigned multiplicand
---      B       - n-bit unsigned multiplier
+--      A       - `numbits`-bit unsigned multiplicand
+--      B       - `numbits`-bit unsigned multiplier
 --      START   - active high signal indicating a multiplication is to start
---      CLK     - clock input (active high)
+--      CLK     - clock input (rising edge active)
 --
 -- Outputs:
---      Q       - (2n-1)-bit product (multiplication result)
---      DONE    - active high signal indicating the multiplication is complete
+--      Q       - (2*numbits-1)-bit product (multiplication result)
+--      DONE    - Active high signal indicating the multiplication is complete
 --                and the Q output is valid
 --
--- Implementation notes:
+-- Details:
+--      This VHDL module implements a bit-serial multiplier that carries out 
+--      multiplication of two `numbits`-bit long unsigned numbers (SLV input)
+--      that closely resembles a binary form of grade-school multiplication.
+--      The bit-serial multiplier was designed according to the general serial 
+--      multiplier layout presented in EE 119a. In considering grade-school 
+--      multiplication of binary numbers, e.g.
+--
+--                      5               101
+--                    x 5             x 101
+--                   -----           -------
+--                     25               101
+--                                     000
+--                                  + 101
+--                                  --------
+--                                    11001 = 25
+--
+--      we may perform this with the serial multiplier layout presented in 
+--      class as follows
+--
+--       Multiplicand (A)   Multiplier (B)    Product (Q)
+--            101               101             000000  Carry
+--      Start
+--            101               101          -> 100000      \
+--              ^                 ^             ^           |
+--            110               101          -> 010000      |   Multiply each
+--              ^                 ^             ^           |   bit in A by LSB
+--            011               101          -> 101000      |   of B
+--              ^                 ^             ^           /
+--                               |              010100      \
+--                            Rotate B          001010      |   Rotate Q right 
+--                               |              000101      |   until 2s place
+--                              \|/             100010      /   is LSB
+--            101               110          -> 010001      \
+--              ^                 ^             ^           |
+--            110               110          -> 101000      |   Multiply each
+--              ^                 ^             ^           |   bit in A by 1st
+--            011               110          -> 010100      |   bit of B
+--              ^                 ^             ^           /
+--                               |              001010      \
+--                            Rotate B          000101      |   Rotate Q right 
+--                               |              100010      |   until 4s place
+--                              \|/             010001      /   is LSB
+--            101               011          -> 001000  C=1 \
+--              ^                 ^             ^           |
+--            110               011          -> 100100      |   Multiply each
+--              ^                 ^             ^           |   bit in A by 1st
+--            011               011          -> 110010      |   bit of B
+--              ^                 ^             ^           /
+--                                           -> 011001          Propagate 
+--                                              = 25            final carry 
+--
+--      In general, the serial multiplication algorithm is:
+--          1) Multiply each bit in A by the LSB of B and shift the result 
+--            into Q.
+--          2) Rotate Q until the 2's place is in the LSB of Q =
+--          3) Multiply each bit in A by the 2's place bit in B, and propagate
+--             carry.
+--          4) Rotate Q with carry (propagate final carry from the `numbits`
+--             additions when rotating A around, if necessary, into the first 
+--             rotation).
+--          5) Repeat (3) and (4) until at MSB of B. Then multiply each bit 
+--             in A by the MSB in B serially as before.
+--          6) Rotate Q one final time to propagate the final carry and obtain
+--             the result.
+--
+--      This sort of cyclic multiplication is implemented with a three-state 
+--      Mealy finite state machine. The default state is IDLE, in which the 
+--      system awaits a START signal. On the rising edge of CLK with an 
+--      active START, the FSM transitions into a MULTIPLYING state, indicating 
+--      multiplication is in progress. When the multiplication is complete, 
+--      the FSM transitions to a FINISHED state, which asserts the active high 
+--      DONE signal for one clock. On the next clock, the FSM transitions back 
+--      to IDLE. The output decoding of the FSM is designed so that the 
+--      multiplication output is valid until the next rising edge of CLK 
+--      with START active.
+--
+--      To simplify the implementation of the "rotate A, then rotate Q, then 
+--      rotate B" logic in the bit-serial multiplication algorithm, three 
+--      internal system counters are used.
+--          - A shift counter - counts the number of shifts (i.e. right rotates)
+--                              done on A. This counter goes from 0 to a top 
+--                              value of `numbits`-1 for each bit in `B`, from 
+--                              LSB to MSB.
+--          - B shift counter - counts the number of right rotates done on B.
+--                              This counter goes from 0 to a top value of 
+--                              `numbits` once per multiplication. 
+--                              Multiplication is finished when this counter 
+--                              reaches the top value.
+--          - Q shift counter - counts the number of right rotates (with carry
+--                              into the full adder) done on Q when rotating 
+--                              around after multiplying every bit in A with 
+--                              a bit in B. This counter goes from 0 to a top 
+--                              value of `numbits`+1, as that many rotates 
+--                              are required to effectively right shift the 
+--                              value in Q once (move the "cursor" up a digit).
+--
+--      With these counts (denoted a, b, and q) annotated, the sample
+--      calculation would look like this 
+--
+--             A        a        B       b         Q        q
+--            101       0       101      0      000000      0
+--      Start
+--            101       0       101      0   -> 100000      0
+--              ^                 ^             ^       
+--            110       1       101      0   -> 010000      0
+--              ^                 ^             ^       
+--            011       2       101      0   -> 101000      0
+--              ^                 ^             ^       
+--                               |              010100      1
+--                            Rotate B   1      001010      2
+--                               |              000101      3
+--                              \|/             100010      4
+--            101       0       110      1   -> 010001      0
+--              ^                 ^             ^       
+--            110       1       110      1   -> 101000      0
+--              ^                 ^             ^       
+--            011       2       110      1   -> 010100      0
+--              ^                 ^             ^       
+--                               |              001010      1
+--                            Rotate B   2      000101      2
+--                               |              100010      3
+--                              \|/             010001      4
+--            101       0       011      2   -> 001000      0
+--              ^                 ^             ^       
+--            110       1       011      2   -> 100100      0
+--              ^                 ^             ^       
+--            011       2       011      2   -> 110010      0
+--              ^                 ^             ^       
+--                                       3   -> 011001      1
+--                                              = 25    
+--
+--      The B count increments whenever the A count reaches top. The Q count 
+--      runs from 0 to `numbits`+1 whenever the A count reaches top.
+--
+--      The FSM uses these counter values in addition to the current state to 
+--      generate outputs 
+--          - AND enable      - The FSM control line to the AND gate that 
+--                              performs the serial multiplication. The AND 
+--                              gate is inactive when Q is being rotated around
+--                              and also for the final carry propagate rotate 
+--                              of Q.
+--          - Carry DFF clear - The carry DFF that registers the carry out 
+--                              of the full adder as the next 
+--          - Serial enable signals for the shift registers A, B, and Q. The 
+--            former shift registers are internal registered signals.
+--          - Parallel load enables for the registers that allow inputs A and B 
+--            to be loaded in during IDLE, and for the Q buffer to be cleared.
+--
+-- Usage notes:
 --      - DONE is active for one clock period after the multiplication 
 --        operation completes.
---      - The product is valid for at least two clocks after the FSM state 
---        becomes DONE. 
---      - The product register is cleared synchronously whenever the FSM state 
---        is IDLE.
+--      - After a multiplication, the product is valid until the first rising 
+--        edge on CLK where START is active.
+--      - The product register is cleared synchronously whenever START is
+--        active. Thus, when a multiplication operation completes, the 
+--        product register is valid until the next operation.
 --
--- Notes:
+-- Implementation notes:
 --      - The extra credit is not attempted. The multiplication process will 
---        always run for 2 * n^2 clocks.
+--        always run for at least 2 * n^2 clocks.
 --
 -- Revision History:
 --      7 Apr 00  Glen George       Initial revision.
@@ -40,6 +190,14 @@
 --      11/21/2018      Ray Sun     Updated entity declaration provided
 --                                  by Glen, thirteen years later...
 --      11/21/2018      Ray Sun     Initial architecture revision.
+--      11/21/2018      Ray Sun     Gave signals more sensible names.
+--      11/22/2018      Ray Sun     Verified functionality exhaustively for 
+--                                  `numbits` from 2 to 4 with testbench.
+--      11/22/2018      Ray Sun     Increased upper range of B shift counter 
+--                                  by 1 to allow the multiplier to handle the 
+--                                  1-bit case.
+--      11/22/2018      Ray Sun     Improved documentation.
+--      11/22/2018      Ray Sun     Improved documentation.
 --------------------------------------------------------------------------------
 
 
@@ -72,6 +230,8 @@ architecture DataFlow of BitSerialMultiplier is
     -- Boolean constants for std_logic types 
     constant SL_HIGH:   std_logic := '1';
     constant SL_LOW:    std_logic := '0';
+    constant SL_ONE:    std_logic := '1';
+    constant SL_ZERO:   std_logic := '0';
     
     ---------------------------- REGISTERS -------------------------------------
     -- Internal (shift) registers for the multiplicand A and multiplier B
@@ -85,10 +245,12 @@ architecture DataFlow of BitSerialMultiplier is
     --------------------------- FSM OUTPUTS ------------------------------------
     signal  serEnA:     std_logic;      -- Active high erial shift enable 
     signal  serEnB:     std_logic;      -- signals for the A, B, and Q registers 
-    signal  serEnQ:     std_logic;
+    signal  serEnQ:     std_logic;      -- These are synchronous.
     signal  loadRegs:   std_logic;      -- Active high parallel load signal
                                         -- Used to load in multiplication
-                                        -- inputs and clear product register
+                                        -- inputs. Synchronous
+    signal  clearQ:     std_logic;      -- Active high synchronous clear for
+                                        -- Q to clear product register
     signal  adderEnable:    std_logic;  -- Adder enable: FSM output to the 
                                         -- 3-input AND gate
     signal  carryClear: std_logic;      -- Synchronous carry clear (DFF clear)
@@ -107,7 +269,7 @@ architecture DataFlow of BitSerialMultiplier is
     --      A full shift (MSB of B rotated into the LSB position) occurs once 
     --      per complete multiply operation. So this count increments only when 
     --      the A shift count is at its top value
-    signal  shiftCountB:    integer range 0 to numbits;
+    signal  shiftCountB:    integer range 0 to numbits+1;
     
     -- Counter that keeps track of the number of times Q has to be shifted 
     -- between successive multiplications of A by each bit in B 
@@ -205,6 +367,10 @@ begin
     -- Parallel load signal is only active when not multiplying 
     loadRegs <=     SL_HIGH when currState = IDLE else 
                     SL_LOW;
+    -- Clear Q on start (and synchronously with the register)
+    clearQ <=       SL_HIGH when (currState = IDLE) and 
+                                 (START = SL_HIGH) else 
+                    SL_LOW;
     -- Carry DFF is only cleared when not multiplying 
     carryClear <=   SL_HIGH when currState = IDLE else 
                     SL_LOW;  
@@ -237,7 +403,6 @@ begin
             if (currState = IDLE) or (shiftCountA = SCA_TOP) then
                 shiftCountA <= SCA_BOTTOM;
             -- Increment whenever Q shift counter is zero and we are multiplying
-            --elsif (currState = MULTIPLYING) and (shiftCountQ = SCQ_BOTTOM) then
             elsif serEnA = SL_HIGH then
                 shiftCountA <= shiftCountA + 1;
             end if;
@@ -253,7 +418,6 @@ begin
             if currState = IDLE then 
                 shiftCountB <= SCB_BOTTOM;
             -- Increment when we are multiplying and the A counter reaches top
-            --elsif (currState = MULTIPLYING) and (shiftCountA = SCA_TOP) then
             elsif serEnB = SL_HIGH then
                 shiftCountB <= shiftCountB + 1;
                 -- No need to reset if at top since top value must persist for 
@@ -297,7 +461,7 @@ begin
             -- Otherwise, if serial enable is active, rotate the register
             -- LSB becomes MSB, everything else shifted right
             elsif serEnA = SL_HIGH then
-                Areg(0) <= Areg(numbits-1);
+                Areg(numbits-1) <= Areg(0);
                 rotate_a_loop : for i in 0 to numbits-2 loop 
                     Areg(i) <= Areg(i+1);
                 end loop;
@@ -318,7 +482,7 @@ begin
             -- Otherwise, if serial enable is active, rotate the register
             -- LSB becomes MSB, everything else shifted right
             elsif serEnB = SL_HIGH then
-                Breg(0) <= Breg(numbits-1);
+                Breg(numbits-1) <= Breg(0);
                 rotate_b_loop : for i in 0 to numbits-2 loop 
                     Breg(i) <= Breg(i+1);
                 end loop;
@@ -332,8 +496,8 @@ begin
     process (CLK)
     begin
         if rising_edge(CLK) then
-            -- If the load signal is active, then clear the product register 
-            if loadRegs = SL_HIGH then 
+            -- If the clear signal is active, then clear the product register 
+            if clearQ = SL_HIGH then 
                 Q <= (others => SL_LOW);
             -- Otherwise, if the serial enable is active, then shift in 
             -- adder output from the left and cycle the LSB as the first addend
