@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- SysLfsr.vhd - VHDL implementation of a LFSR for playing non-versampled 
+-- SysLfsr.vhd - VHDL implementation of a LFSR for playing non-oversampled 
 -- audio with the PWM Audio Player for extra credit.
 --
 -- Description:
