@@ -5,7 +5,10 @@
 --
 -- Description:
 --      This is a testbench for a 16-bit serial divider design with entity 
---      `Div16` and architecture `DataFlow`.
+--      `Div16` and architecture `DataFlow`. The testbench architecture 
+--      `TB_ARCHITECTURE` exercises the entity by checking that inputs are 
+--      correctly entered and that division of edge cases and random cases 
+--      returns the correct quotient.
 --
 -- Table of Contents:
 --      entity          SerialDivider16_tb
@@ -16,7 +19,7 @@
 --      - For best results (not waiting for several minutes for the simulation 
 --        to run), adjust the `resolution` selector to `100 ns` in the 
 --        dialog that prompts for the architecture to simulate.
---      - For 20 testvectors (given), simulate to around 2.25 seconds.
+--      - For 20 testvectors (as given), simulate to around 2.25 seconds.
 --
 -- Revision History:
 --      11/29/2018      Ray Sun     Initial revision.
@@ -26,6 +29,7 @@
 --      12/01/2018      Ray Sun     Added some division tests.
 --      12/03/2018      Ray Sun     Restored actual system clock period once 
 --                                  resolution feature in simulation found.
+--      12/03/2018      Ray Sun     Added more division tests.
 --------------------------------------------------------------------------------
 
 
@@ -278,7 +282,7 @@ begin
             wait until falling_edge(Clock);
             
             -- Enter the digits in the 1st entry in the testvectors
-            KeypadVal  <= DIVIDEND_VALS(0)((4 * i) + 3 downto (4 * i));
+            KeypadVal  <= DIVIDEND_VALS(0)( (4 * i) + 3 downto (4 * i) );
             KeypadRdy  <= SL_HIGH;          -- Key is ready
             
             wait until falling_edge(Clock);
@@ -298,7 +302,7 @@ begin
             wait until falling_edge(Clock);
             
             -- Enter the digits in the 1st entry in the testvectors 
-            keypadVal  <= DIVISOR_VALS(0)((4 * i) + 3 downto (4 * i));
+            keypadVal  <= DIVISOR_VALS(0)( (4 * i) + 3 downto (4 * i) );
             keypadRdy  <= SL_HIGH;          -- Key is ready
             
             wait until falling_edge(Clock);
@@ -311,7 +315,7 @@ begin
             wait until ExpectedDigit = SSD_MUX_SEQUENCE(i);
             wait until falling_edge(Clock);
             -- Get the current expected dividend digit 
-            ExpectedDigitVal := DIVIDEND_VALS(0)((4 * i) + 3 downto (4 * i));
+            ExpectedDigitVal := DIVIDEND_VALS(0)( (4 * i) + 3 downto (4 * i) );
             -- and compare it to the result from the UUT (`SsdOutput`)
             assert(std_match(SsdOutput, ExpectedDigitVal))
                 report "Dividend digit mismatch! Actual: " &
@@ -328,7 +332,7 @@ begin
             wait until ExpectedDigit = SSD_MUX_SEQUENCE(i + 4);
             wait until falling_edge(Clock);
             -- Get the current expected divisor digit 
-            ExpectedDigitVal := DIVISOR_VALS(0)((4 * i) + 3 downto (4 * i));
+            ExpectedDigitVal := DIVISOR_VALS(0)( (4 * i) + 3 downto (4 * i) );
             -- and compare it to the result from the UUT (`SsdOutput`)
             assert(std_match(SsdOutput, ExpectedDigitVal))
                 report "Divisor digit mismatch! Actual: " &
@@ -358,7 +362,7 @@ begin
                 wait until ExpectedMuxCnt = to_unsigned(0, MUXCNT_SIZE);
                 wait until ExpectedDigit = 3;
                 wait until falling_edge(Clock);
-                KeypadVal  <= DIVIDEND_VALS(j)((4 * i) + 3 downto (4 * i));
+                KeypadVal  <= DIVIDEND_VALS(j)( (4 * i) + 3 downto (4 * i) );
                 KeypadRdy  <= SL_HIGH;
                 wait until falling_edge(Clock);
                 KeypadRdy  <= SL_LOW;
@@ -371,7 +375,7 @@ begin
                 wait until ExpectedMuxCnt = to_unsigned(0, MUXCNT_SIZE);
                 wait until ExpectedDigit = 7;
                 wait until falling_edge(Clock);
-                KeypadVal  <= DIVISOR_VALS(j)((4 * i) + 3 downto (4 * i));
+                KeypadVal  <= DIVISOR_VALS(j)( (4 * i) + 3 downto (4 * i) );
                 KeypadRdy  <= SL_HIGH;
                 wait until falling_edge(Clock);
                 KeypadRdy  <= SL_LOW;
@@ -389,7 +393,7 @@ begin
             for i in 0 to 3 loop
                 wait until ExpectedDigit = SSD_MUX_SEQUENCE(i + 8);
                 wait until falling_edge(Clock);
-                ExpectedQuotient := QUOTIENT_VALS(j)((4 * i) + 3 downto (4 * i));
+                ExpectedQuotient := QUOTIENT_VALS(j)( (4 * i) + 3 downto (4 * i) );
                 assert(std_match(SsdOutput, ExpectedQuotient))
                     report "Quotient digit mismatch! Actual: " &
                            integer'image(to_integer(unsigned(
