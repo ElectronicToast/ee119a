@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 --                                div16.vhd                                   --
 --                          16-bit Serial Divider                             --
+--                with preserved input and SSD segment decoding               --
 --------------------------------------------------------------------------------
 --
 -- Description:
@@ -26,10 +27,16 @@
 --     CLK                      The clock (1 MHz)
 --  
 -- Outputs: 
---     HexDigit(3 downto 0)     The hex digit to display (to segment decoder)
+--     SsdDigit(0 to 6)         The seven segments to display (decoded)
 --     DecoderEn                Enable for the 4:12 digit decoder
 --     DecoderBit(3 downto 0)   The digit to display (to 4:12 decoder)
---
+--     SsdSel(0 to 11)          Decoded one-hot 12-bit bus for digit select 
+--                              ################  NOT USED #####################
+--                              Designed so that 
+--                                      SsdSel(0) ... SsdSel(11)
+--                              corresponds to going down the row of pins 58...
+--                              64 on the schematic
+--                                      
 -- Table of Contents:
 --      entity              Div16
 --      architecture        DataFlow
@@ -72,12 +79,41 @@
 --
 --      The division algorithm works by performing iterative bit-serial
 --      addition or subtraction on each bit in the dividend, starting with 
---      the most significant bit. 
+--      the most significant bit. Before division begins, the remainder is 
+--      preloaded with all zeroes except with the MSB of the dividend in the 
+--      LSB. Then the divisor is subtracted from the remainder with serial 
+--      subtraction. Since subtraction should begin with no borrow, the 
+--      system carry flag is preset high. When the subtraction completes, 
+--      one additional clock is taken to propagate the carry out from 
+--      the calculation correctly and shit the remainder so that the difference 
+--      is in the high 16 bits, and the next bit of the dividend - the second 
+--      most significant bit - is loaded into the remainder LSB. 
+--
+--      Once the subtration completes, if there is a borrow out, the 
+--      divider switches to adding. Similarly, if the algorithm is adding and 
+--      there is a carry out, the divider switches to subtraction.
+--
+--      At the end of every operation, the carry out (not borrow out) is 
+--      shifted left into the quotient. 
+--
+--      In order to control this, the divider makes use of two internal counters 
+--          - Dividend Counter - keeps track of the number of times that 
+--                               the dividend has been rotated left (to shift 
+--                               successively lower significant bits into the 
+--                               remainder).
+--          - Divisor Counter -  keeps track of right rotates of the divisor 
+--                               to perform bit-serial addition/subtraction.
+--      The division completes when both counters reach their top values. Since 
+--      the remainder is not computed, no additional add/subtract is run. 
+--      This design also makes it so the dividend and the divisor are 
+--      restored at the end of the calculation.
 -- 
 -- Extra Credit Attempted:
 --      - Preserve Dividend and Divisor
 --      - Segment Decoding
 --      - Digit Decoding
+--          I could not get digit decoding to fit (there were 129 MCs). So 
+--          it is commented out.
 --
 -- Revision History:
 --     25 Nov 18  Glen George       Initial version (from 11/21/09 version
@@ -104,6 +140,8 @@
 --     12/03/2018   Ray Sun         Verified functionality on board.
 --     12/03/2018   Ray Sun         Branched off from non-EC version.
 --     12/03/2018   Ray Sun         Got segment decoding working on board.
+--     12/03/2018   Ray Sun         Implemented digit decoding (12 bit one hot)
+--                                  but could not get design to fit.
 --------------------------------------------------------------------------------
 
 
@@ -123,7 +161,6 @@ entity Div16 is
         Divisor     :  in   std_logic;
         KeypadRdy   :  in   std_logic;
         Keypad      :  in   std_logic_vector(3 downto 0);
-        --HexDigit    :  out  std_logic_vector(3 downto 0);
         SsdDigit    :  out  std_logic_vector(0 to 6);
         --SsdSel      :  out  std_logic_vector(11 downto 0);
         DecoderEn   :  out  std_logic;
@@ -610,6 +647,8 @@ begin
     --      digits #
     --              7, 0, 6, 1, 8, 9, 10, 11, 3, 4, 2, 5
     --      So decode as follows
+    --
+    -- Unused - design will not fit
     --with to_integer(unsigned(CurDigit)) select
     --    SsdSel <=   "010000000000" when x"0",
     --                "000100000000" when x"1",
