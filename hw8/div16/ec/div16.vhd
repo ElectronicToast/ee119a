@@ -76,6 +76,8 @@
 -- 
 -- Extra Credit Attempted:
 --      - Preserve Dividend and Divisor
+--      - Segment Decoding
+--      - Digit Decoding
 --
 -- Revision History:
 --     25 Nov 18  Glen George       Initial version (from 11/21/09 version
@@ -100,7 +102,8 @@
 --     12/03/2018   Ray Sun         Verified functionality with more test cases.
 --     12/03/2018   Ray Sun         Improved documentation.
 --     12/03/2018   Ray Sun         Verified functionality on board.
---     12/03/2018   Ray Sun         Branched off into extra credit version.
+--     12/03/2018   Ray Sun         Branched off from non-EC version.
+--     12/03/2018   Ray Sun         Got segment decoding working on board.
 --------------------------------------------------------------------------------
 
 
@@ -598,6 +601,51 @@ begin
     DecoderEn <=    SL_FALSE when std_match(CurDigit, "11--") else 
                     SL_TRUE; 
     DecoderBit <=   CurDigit;   -- Output the current digit to the digit decoder
+    
+    -- Decode the SSD output select (12 bits, one-hot active high)
+    --      The `CurDigit`th bit is active - if in the calculate digit, don't 
+    --      care since the decoder would be disabled.
+    --
+    --      Going down the pins on the schematic, the 12 decode lines go to 
+    --      digits #
+    --              7, 0, 6, 1, 8, 9, 10, 11, 3, 4, 2, 5
+    --      So decode as follows
+    --with to_integer(unsigned(CurDigit)) select
+    --    SsdSel <=   "010000000000" when x"0",
+    --                "000100000000" when x"1",
+    --                "000000000010" when x"2",
+    --                "000000001000" when x"3",
+    --                "000000000100" when x"4",
+    --                "000000000001" when x"5",
+    --                "001000000000" when x"6",
+    --                "100000000000" when x"7",
+    --                "000010000000" when x"8",
+    --                "000001000000" when x"9",
+    --                "000000100000" when x"10",
+    --                "000000010000" when x"11",
+    --                "000000000000" when others,
+                
+    -- Decode the SSD output digit (seven lines, active low)
+    --      The hex digit to output the low nibble of the digit shift register
+    --      (Don't care if `CurDigit` is the dummy value)
+    with DigitBits(NIBBLE_SIZE-1 downto 0) select
+        SsdDigit <=     "0000001" when x"0",       -- "0" on SSD
+                        "1001111" when x"1",       -- "1" on SSD
+                        "0010010" when x"2",       -- "2" on SSD
+                        "0000110" when x"3",       -- "3" on SSD
+                        "1001100" when x"4",       -- "4" on SSD
+                        "0100100" when x"5",       -- "5" on SSD
+                        "0100000" when x"6",       -- "6" on SSD
+                        "0001111" when x"7",       -- "7" on SSD
+                        "0000000" when x"8",       -- "8" on SSD
+                        "0000100" when x"9",       -- "9" on SSD
+                        "0001000" when x"A",       -- "A" on SSD
+                        "1100000" when x"B",       -- "b" on SSD
+                        "0110001" when x"C",       -- "C" on SSD
+                        "1000010" when x"D",       -- "d" on SSD
+                        "0110000" when x"E",       -- "E" on SSD
+                        "0111000" when x"F",       -- "F" on SSD
+                        "1111110" when others;  -- "-" for error
     ----------------------------------------------------------------------------
 
     
