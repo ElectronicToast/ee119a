@@ -28,7 +28,7 @@
 --     CLK                      The clock (1 MHz)
 --  
 -- Outputs: 
---     SsdDigit(3 downto 0)     The seven segments to display (decoded)
+--     HexDigit(3 downto 0)     The seven segments to display (not decoded)
 --     DecoderEn                Enable for the 4:12 digit decoder
 --     DecoderBit(3 downto 0)   The digit to display (to 4:12 decoder)
 --
@@ -149,8 +149,7 @@ entity Div16 is
         Divisor     :  in   std_logic;
         KeypadRdy   :  in   std_logic;
         Keypad      :  in   std_logic_vector(3 downto 0);
-        SsdDigit    :  out  std_logic_vector(0 to 6);
-        --SsdSel      :  out  std_logic_vector(11 downto 0);
+        HexDigit    :  out  std_logic_vector(3 downto 0);
         DecoderEn   :  out  std_logic;
         DecoderBit  :  out  std_logic_vector(3 downto 0);
         CLK         :  in   std_logic
@@ -623,9 +622,12 @@ begin
     ------------------------ DIGIT OUTPUT LOGIC --------------------------------
     -- The digit output decoder is only enabled when the display mux count 
     -- (`CurDigit`) is not 12-15 (when displaying digits)
-    DecoderEn <=    SL_FALSE when std_match(CurDigit, "11--") else 
+    DecoderEn  <=   SL_FALSE when std_match(CurDigit, "11--") else 
                     SL_TRUE; 
     DecoderBit <=   CurDigit;   -- Output the current digit to the digit decoder
+    
+    -- The hex digit to output is the low nibble of the digit shift register.
+    HexDigit   <=   DigitBits(NIBBLE_SIZE-1 downto 0);
     ----------------------------------------------------------------------------
 
     
