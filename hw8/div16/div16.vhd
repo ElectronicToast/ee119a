@@ -65,6 +65,9 @@
 --                                  of an operation to propagate the correct 
 --                                  Carry / !Borrow.
 --     12/01/2018   Ray Sun         Fixed `CurDigit` cycling errors.
+--     12/02/2018   Ray Sun         Verified functionality with `Div16_tb` 
+--                                  testbench.
+--     12/03/2018   Ray Sun         Verified functionality with more test cases.
 --------------------------------------------------------------------------------
 
 
@@ -129,7 +132,7 @@ architecture DataFlow of Div16 is
     constant  DVD_CNTR_LOW  :   integer := 0;               -- Range for the 
     constant  DVD_CNTR_HIGH :   integer := DIVIDER_SIZE;    -- dividend count
     constant  DVR_CNTR_LOW  :   integer := 0;               -- Range for the 
-    constant  DVR_CNTR_HIGH :   integer := DIVIDER_SIZE-1;  
+    constant  DVR_CNTR_HIGH :   integer := DIVIDER_SIZE;    -- divisor count
     
     -- Shift operation select opcodes 
     constant  SHIFTOP_SIZE  :   integer := 2;
@@ -235,7 +238,10 @@ architecture DataFlow of Div16 is
     ----------------------------------------------------------------------------
 
     ------------------------- STORED DIGITS ------------------------------------
-    -- 12 stored hex digits (48 bits) in a shift register 
+    -- 12 stored hex digits (48 bits) and a dummy digit for calculation (4 bits)
+    -- in a shift register. 4 hex digits (16 bits) of remainder in a separate
+    -- shift register.
+    --
     -- Format:
     --
     --      | Remainder |   | Quotient | Divisor | Dividend |
