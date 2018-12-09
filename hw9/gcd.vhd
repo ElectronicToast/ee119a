@@ -140,7 +140,7 @@ use ieee.numeric_std.all;       -- For unsigned type
 
 entity Gcd is 
     generic(
-        N_BITS      :           integer
+        N_BITS      :           integer := 16
     );
     port(
         SysClk      : in        std_logic;
@@ -164,11 +164,6 @@ architecture DataFlow of Gcd is
     -------------------------- CONSTANTS ---------------------------------------
     -- Zero for input bus size
     constant N_ZEROES :     unsigned(N_BITS-1 downto 0) :=  (others => '0');
-                                
-    -- Top value for subtraction counter 
-    --      Need 1 extra clock at the end of each subtraction where subtraction 
-    --      is held to determine if a < b
-    constant SUB_CNTR_TOP   :   integer := N_BITS;
     ----------------------------------------------------------------------------
     
     ---------------------- INPUT HANDLING SIGNALS ------------------------------
@@ -204,7 +199,10 @@ architecture DataFlow of Gcd is
                                         --          regB when bSelect = 0
     
     -- Counter for control of the serial subtraction
-    signal subCntr :    integer range 0 to N_BITS;
+    --      Need 0 to 2^N_BITS range (1 extra count at end of subtraction)
+    --      For synthesis, hard-code in the range 
+    --signal subCntr :    unsigned(integer(ceil(log2(real(N_BITS)))) downto 0);
+    signal subCntr :    unsigned(4 downto 0);
     ----------------------------------------------------------------------------
     
     --------------------------- REGISTERS --------------------------------------
@@ -302,7 +300,7 @@ begin
     -- when the subtraction counter is not at top
     shiftEn <=  '1' when (currState = CALC) and 
                          (doneCalc = '0') and 
-                         (subCntr /= SUB_CNTR_TOP) else 
+                         (subCntr(subCntr'high) = '0') else 
                 '0';
     
     -- Update state process - register the new current state on `SysClk`
@@ -325,8 +323,8 @@ begin
         if rising_edge(SysClk) then 
             -- If not calculating or at top value, clear
             if (currState = IDLE) or 
-               (subCntr = SUB_CNTR_TOP) then
-                subCntr <= 0;
+               (subCntr(subCntr'high) = '1') then
+                subCntr <= (others => '0');
             -- Otherwise increment 
             else
                 subCntr <= subCntr + 1;
@@ -359,7 +357,7 @@ begin
         -- If A is `regA` and B is `regB`, and A < B, swap 
         -- Otherwise A is `regB` and B is `regA`; if A < B, swap 
         elsif rising_edge(SysClk) and 
-              (subCntr = SUB_CNTR_TOP ) and 
+              (subCntr(subCntr'high) = '1') and 
               (aleb = '1') then
             bSelect <= not bSelect;
         end if;
@@ -418,7 +416,7 @@ begin
         if rising_edge(SysClk) then 
             -- If not calculating or at the end of a subtraction, set the 
             -- carry flag (start the next subtraction with no borrow)
-            if (currState = IDLE) or (subCntr = SUB_CNTR_TOP) then 
+            if (currState = IDLE) or (subCntr(subCntr'high) = '1') then 
                 carryFlag <= '1';
             -- Otherwise register the carry out for the next subtract
             else
