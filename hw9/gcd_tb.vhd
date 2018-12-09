@@ -7,7 +7,7 @@
 --      This is a testbench for the N-bit GCD calculator defined by the entity 
 --      `Gcd` with architecture `DataFlow`. It thoroughly tests the entity by 
 --      testing GCD calculations on edge cases and randomly generated test 
---      cases.
+--      cases in a set of test vectors.
 --
 -- Table of Contents
 --      entity              Gcd_Tb
@@ -25,6 +25,8 @@
 -- Revision History:
 --      12/07/2018          Ray Sun         Initial revision.
 --      12/08/2018          Ray Sun         Added more tests.
+--      12/08/2018          Ray Sun         Added comprehensive set of edge 
+--                                          case tests.
 --------------------------------------------------------------------------------
 
 
@@ -46,29 +48,90 @@ end entity;
 architecture TB_ARCHITECTURE of Gcd_Tb is 
 
     ---------------------------- CONSTANTS -------------------------------------
+    -- System clock constants
     constant CLOCK_PERIOD  :    time := 500 ns;   -- System clock, 2 MHz
     constant CLOCK_HALFPER :    time := CLOCK_PERIOD / 2;
     
+    -- High and low times for the CanReadVals signal 
+    --      These values are for the actual physical system
+    constant T_CRV_HIGH    :    time := (32000) * CLOCK_PERIOD;
+    constant T_CRV_LOW     :    time := (400000 - 32000) * CLOCK_PERIOD;
+    
     -- Test constants 
-    constant N_BITS_TEST   :   integer := 16;   -- Number of bits in operands   
-    constant N_RAND_TESTS  :   integer := 10;   -- Number of random tests
+    constant N_BITS_TEST   :    integer := 16;  -- Number of bits in operands   
+    constant N_TESTVECS    :    integer := 18;  -- Number of tests
+    ----------------------------------------------------------------------------
+    
+    ------------------------------ TYPES ---------------------------------------
+    -- Type for arrays of test vectors
+    type tv_array is array (0 to N_TESTVECS-1) of 
+                     std_logic_vector(N_BITS_TEST-1 downto 0);
     ----------------------------------------------------------------------------
     
     ------------------------- STIMULUS SIGNALS ---------------------------------
-    signal SysClk       :  std_logic;
-    signal A            :  std_logic_vector(N_BITS_TEST-1 downto 0);
-    signal B            :  std_logic_vector(N_BITS_TEST-1 downto 0);
-    signal nCalculate   :  std_logic;
-    signal CanReadVals  :  std_logic;
+    signal SysClk       :   std_logic;
+    signal A            :   std_logic_vector(N_BITS_TEST-1 downto 0);
+    signal B            :   std_logic_vector(N_BITS_TEST-1 downto 0);
+    signal nCalculate   :   std_logic;
+    signal CanReadVals  :   std_logic;
     ----------------------------------------------------------------------------
     
     ------------------------- OBSERVED SIGNALS ---------------------------------
-    signal Result       :  std_logic_vector(N_BITS_TEST-1 downto 0);
-    signal ResultRdy    :  std_logic;
+    signal Result       :   std_logic_vector(N_BITS_TEST-1 downto 0);
+    signal ResultRdy    :   std_logic;
     ----------------------------------------------------------------------------
     
     --------------------------- TEST SIGNALS -----------------------------------
-    signal END_SIM      : boolean := FALSE;       -- End-of-sim flag
+    signal END_SIM      :   boolean := FALSE;       -- End-of-sim flag
+    -- The expected GCD of each calculation
+    signal ExpectedGcd  :   std_logic_vector(N_BITS_TEST-1 downto 0);
+    ----------------------------------------------------------------------------
+    
+    --------------------------- TEST VECTORS -----------------------------------
+    -- Test edge cases and some randomly generated values
+    --
+    --  (1) GCD(0, 0) = 0; GCD(a, 0) = GCD(0, a) = a
+    --  (2) GCD(a, 1) = GCD(1, a) = a; GCD(a, a) = a
+    --  (3) The cases from the example handout
+    --
+    -- Operand A test values
+    constant A_VALS : tv_array := (
+        -- Test GCD(0, 0) = 0 and GCD(a, 0) = GCD(0, a) = a
+        x"0000", x"0001", x"0000", x"FFFF", x"0000", x"DEAD", x"0000",
+        -- Test edge cases
+        x"0001", x"FFFF", x"0001", x"AFAF", x"0001", x"C001", x"00FF",
+        -- Test examples
+        std_logic_vector(to_unsigned(255, N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(60,  N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(25,  N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(64,  N_BITS_TEST))
+    );
+        
+    -- Operand B test values
+    constant B_VALS : tv_array := (
+        -- Test GCD(0, 0) = 0 and GCD(a, 0) = GCD(0, a) = a
+        x"0000", x"0000", x"0001", x"0000", x"FFFF", x"0000", x"BEEF", 
+        -- Test edge cases
+        x"0001", x"0001", x"FFFF", x"0001", x"1F80", x"C001", x"00FF",
+        -- Test examples
+        std_logic_vector(to_unsigned(110, N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(84,  N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(11,  N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(88,  N_BITS_TEST))
+    );
+    
+    -- Expected result values 
+    constant GCD_VALS : tv_array := (
+        -- Test GCD(0, 0) = 0 and GCD(a, 0) = GCD(0, a) = a
+        x"0000", x"0001", x"0001", x"FFFF", x"FFFF", x"DEAD", x"BEEF", 
+        -- Test edge cases
+        x"0001", x"0001", x"0001", x"0001", x"0001", x"C001", x"00FF",
+        -- Test examples
+        std_logic_vector(to_unsigned(5,   N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(12,  N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(1,   N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(8,   N_BITS_TEST))
+    );
     ----------------------------------------------------------------------------
     
     --------------------- UNIT UNDER TEST COMPONENT ----------------------------
@@ -113,32 +176,44 @@ begin
     begin 
         -- Initially disable calculation
         nCalculate <= '1';
-        CanReadVals <= '0';
         
         -- Wait a few clocks 
-        wait for 3 * CLOCK_PERIOD;
+        wait for 5 * CLOCK_PERIOD;
         
-        A <= std_logic_vector(to_unsigned(64, N_BITS_TEST));
-        B <= std_logic_vector(to_unsigned(88, N_BITS_TEST));
-        
-        -- Bring calculate input low for a clock
-        wait until falling_edge(SysClk);
-        nCalculate <= '0';
-        wait until falling_edge(SysClk);
-        nCalculate <= '1';
-        
-        -- Wait a decent number of clocks
-        wait for 300 * CLOCK_PERIOD;
-        
-        -- Bring CanReadVals active for a clock
-        wait until falling_edge(SysClk);
-        CanReadVals <= '1';
-        wait until falling_edge(SysClk);
-        CanReadVals <= '0';
-        
-        -- Wait a few clocks 
-        wait for 3 * CLOCK_PERIOD;
-        
+        -- Loop over each of the testvectors:
+        -- Load the operands A and B in each test vector into the UUT, wait for 
+        -- calculation to finish, and check result
+        for i in 0 to N_TESTVECS-1 loop
+            -- Load the values into the operands 
+            A <= A_VALS(i);
+            B <= B_VALS(i);
+            
+            -- Get the expected GCD 
+            ExpectedGcd <= GCD_VALS(i);
+            
+            -- Bring calculate input low for a clock
+            wait until falling_edge(SysClk);    -- Transition on falling edges 
+            nCalculate <= '0';                  -- of the system clock
+            wait until falling_edge(SysClk);
+            nCalculate <= '1';
+                    
+            -- Wait for calculation to finish 
+            wait until ResultRdy = '1';
+            
+            -- Check the result on the next falling edge of the clock
+            wait until falling_edge(SysClk);
+            assert (std_match(Result, ExpectedGcd))
+                report "Incorrect GCD! Actual: " &
+                       integer'image(to_integer(unsigned(Result))) &
+                       ". Expected: " &
+                       integer'image(to_integer(unsigned(ExpectedGcd))) &
+                       "."
+                severity ERROR;
+                
+            -- Wait a few clocks 
+            wait for 5 * CLOCK_PERIOD;
+        end loop;
+
         -- When done, set end of sim flag
         END_SIM <= TRUE;
         wait;
@@ -160,6 +235,23 @@ begin
             SysClk <= '1';
             wait for CLOCK_HALFPER;
         else
+            wait;
+        end if;
+    end process;
+    
+    -- This process generates the `CanReadVals` signal seen by the UUT 
+    CLOCK_CRV : process 
+    begin 
+        if END_SIM = FALSE then
+            CanReadVals <= '1';
+            wait for T_CRV_HIGH;
+        else 
+            wait;
+        end if;
+        if END_SIM = FALSE then
+            CanReadVals <= '0';
+            wait for T_CRV_LOW;
+        else 
             wait;
         end if;
     end process;

@@ -7,7 +7,9 @@
 --      This file contains a VHDL entity `Gcd` with architecture `DataFlow` that
 --      implements a N-bit GCD calculator using Euclid's subtraction
 --      algorithm and a bit-serial subtracter. This module is used by the 
---      top-level entity 
+--      top-level entity `system` to implement a 16-bit GCD calculator with 
+--      multiplexed seven-segment display output, debounced keypad input,
+--      and a GCD operand select switch.
 --
 -- Generic Parameters:
 --      N_BITS              Number of bits in the GCD operands. 
@@ -30,7 +32,7 @@
 -- Details:
 --      Euclid's subtraction algorithm, in pseudocode, is given by
 --
---              DO
+--              REPEAT
 --                  WHILE a >= b 
 --                      a = a - b 
 --                  ENDWHILE
@@ -38,9 +40,64 @@
 --              UNTIL (b = 0)
 --              gcd = a
 --
---      where `a` and `b` are unsigned integers.
+--      where `a` and `b` are unsigned integers. This VHDL entity implements 
+--      Euclid's subtraction algorithm using a full serial subtracter and 
+--      a pair of internal 16-bit registers. 
+--
+--      The GCD calculation is begun when `nCalculate` becomes active (low). 
+--      The calculation result is returned in `Result`. When the GCD calculation
+--      finishes, `Result` will be held until `CanReadVals` is active, if it 
+--      is not already active. Once this occurs, the GCD calculator will assert 
+--      the `ResultRdy` active high flag, indicating a valid result. The result 
+--      is valid for one clock. 
+--
+--      The GCD calculator is controlled by a Moore state machine with the 
+--      following states
+--              IDLE        Awaiting calculation start (`nCalculate` go active)
+--              CALC        Calculating GCD 
+--              DONE        Done with computation, waiting for active 
+--                          `CanReadVals` to indicate valid result. 
+--
+--      The active low `nCalculate` input is synchronized with a pair of DFFs.
+--      The synchronized input controls the state transition from idle to the 
+--      calculation state. Whenever the calculator is in the IDLE state, the 
+--      GCD operands A and B are loaded into the internal register pair. These 
+--      registers are controlled by a paralle load enable (loadEn) for 
+--      loading the inputs when IDLE, and a serial shift enable (shiftEn)
+--      for calculation. The former takes precedence.
+--
+--      The GCD calculator design is centered around an "in-place" 
+--      implementation of Euclid's subtraction - the inputs A and B remain in 
+--      the pair of internal registers `regA` and `regB`, and swapping A and B 
+--      as specified in the algorithm is done by a registered signal that 
+--      tells the system to consider `regB` as A, and vice versa. This signal 
+--      is implemented as an active high "B select". When this `bSelect` is
+--      active, `regB` is the minuend and `regA` is the subtrahend (since the 
+--      system considers `A` and `B` to be `regB` and `regA` respectively.
+--
+--      Subtraction is performed with a N-bit full serial subtracter. The 
+--      registers `regA` and `regB` are shifted right and the LSBs are
+--      subtracted. Depending on which register is A and B per subtraction, 
+--      the difference, or the LSB, is shifted into the MSB of each register.
+--      For example, if `bSelect` is inactive (indicating "A" is `aReg`, "B" 
+--      is `bReg`), the difference will be shifted into the MSB of `aReg` while
+--      `bReg` is rotated right.
+--
+--      The result is always whatever the system takes to be "A" (which may or 
+--      may not be valid at any given time). A `ResultRdy` flag is generated 
+--      to indicate valid result.
+--
+--      Calculation finishes when the register that is considered to be "B"
+--      becomes zero. A done with calculation flag (`doneCalc`) is set to 
+--      transition the FSM to the DONE state. Then the result is held until
+--      the can read values input `CanReadVals` is active, waits for a clock 
+--      (for the overall system to read the result), and then transitions 
+--      back to IDLE. This is done so that the system can multiplex display 
+--      digits with time allotted for calculating. 
 --
 -- Notes:
+--    - The Calculate input is denoted as `nCalculate` to reflect the 
+--      active low button input on the physical system board.
 --    - Calculating GCD(a, 0) or GCD(0, a), where a != 0, will always result 
 --      in `a`. This is due to the implementation of Euclid's subtraction.
 --    - This Euclid's subtraction implementation was designed with a completely 
@@ -55,6 +112,10 @@
 --      12/07/2018          Ray Sun         Implemented 'in-place' Euclid's 
 --                                          subtraction with serial subtract
 --      12/07/2018          Ray Sun         Fixed cases where B > A
+--      12/08/2018          Ray Sun         Added 1 extra clock per subtraction 
+--                                          to perform comparison correctly
+--      12/08/2018          Ray Sun         Verified functionality with 
+--                                          testbench
 --------------------------------------------------------------------------------
 
 
@@ -95,8 +156,10 @@ architecture DataFlow of Gcd is
     -- Zero for input bus size
     constant N_ZEROES :     unsigned(N_BITS-1 downto 0) :=  (others => '0');
                                 
-    -- High value for subtraction counter 
-    constant SUB_CNTR_TOP   :   integer := N_BITS-1;
+    -- Top value for subtraction counter 
+    --      Need 1 extra clock at the end of each subtraction where subtraction 
+    --      is held to determine if a < b
+    constant SUB_CNTR_TOP   :   integer := N_BITS;
     ----------------------------------------------------------------------------
     
     ---------------------- INPUT HANDLING SIGNALS ------------------------------
@@ -133,7 +196,7 @@ architecture DataFlow of Gcd is
                                         --          regB when bSelect = 0
     
     -- Counter for control of the serial subtraction
-    signal subCntr :    integer range 0 to N_BITS-1;
+    signal subCntr :    integer range 0 to N_BITS;
     ----------------------------------------------------------------------------
     
     --------------------------- REGISTERS --------------------------------------
@@ -190,7 +253,7 @@ begin
     
     
     -- Combinational process for state logic 
-    process ( nCalculateS(1), doneCalc, CanReadVals )
+    process ( currState, nCalculateS(1), doneCalc, CanReadVals )
     begin
         case currState is
             -- If in the idle state and the synchronized `nCalculate` is low, 
@@ -212,7 +275,7 @@ begin
             -- Only leave the done state if `CanReadVals` is active (high)
             -- so the system can read outputs
             when DONE =>
-                if CanReadVals = '1' then 
+                if CanReadVals = '1' then
                     nextState <= IDLE;
                 else 
                     nextState <= nextState;     -- Don't infer latch
@@ -227,8 +290,11 @@ begin
     -- Keep parallel loading operands into registers if IDLE
     loadEn <=   '1' when currState = IDLE else 
                 '0';
-    -- Enable shifting only when calculating and not done
-    shiftEn <=  '1' when currState = CALC and doneCalc = '0' else 
+    -- Enable shifting (subtraction) only when calculating and not done, and 
+    -- when the subtraction counter is not at top
+    shiftEn <=  '1' when (currState = CALC) and 
+                         (doneCalc = '0') and 
+                         (subCntr /= SUB_CNTR_TOP) else 
                 '0';
     
     -- Update state process - register the new current state on `SysClk`
