@@ -138,6 +138,22 @@ use ieee.numeric_std.all;       -- For unsigned type
 --------------------------------------------------------------------------------
 
 
+-- GCD Calculator entity:
+--
+-- Generic Parameters:
+--      N_BITS              Number of bits in the GCD operands. 
+--
+-- Inputs:
+--      SysClk              The system clock 
+--      A (N_BITS-1 ... 0)  GCD operand A
+--      B (N_BITS-1 ... 0)  GCD operand B
+--      nCalculate          Active low calculation start input (unsynch)
+--      CanReadVals         Active high ready to receive output signal  (synch)
+--
+-- Outputs:
+--      Result (N_BITS-1 ... 0)         The GCD result 
+--      ResultRdy                       Active high result is valid output
+--
 entity Gcd is 
     generic(
         N_BITS      :           integer := 16
