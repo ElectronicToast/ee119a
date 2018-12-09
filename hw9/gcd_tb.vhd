@@ -59,7 +59,7 @@ architecture TB_ARCHITECTURE of Gcd_Tb is
     
     -- Test constants 
     constant N_BITS_TEST   :    integer := 16;  -- Number of bits in operands   
-    constant N_TESTVECS    :    integer := 18;  -- Number of tests
+    constant N_TESTVECS    :    integer := 24;  -- Number of tests
     ----------------------------------------------------------------------------
     
     ------------------------------ TYPES ---------------------------------------
@@ -88,11 +88,14 @@ architecture TB_ARCHITECTURE of Gcd_Tb is
     ----------------------------------------------------------------------------
     
     --------------------------- TEST VECTORS -----------------------------------
-    -- Test edge cases and some randomly generated values
+    -- Test edge cases and some primes, coprimes, small composites, and 
+    -- highly composite values.
     --
     --  (1) GCD(0, 0) = 0; GCD(a, 0) = GCD(0, a) = a
     --  (2) GCD(a, 1) = GCD(1, a) = a; GCD(a, a) = a
-    --  (3) The cases from the example handout
+    --  (3) Primes and coprimes
+    --  (4) The composite cases from the example handout
+    --- (5) Composites
     --
     -- Operand A test values
     constant A_VALS : tv_array := (
@@ -100,11 +103,19 @@ architecture TB_ARCHITECTURE of Gcd_Tb is
         x"0000", x"0001", x"0000", x"FFFF", x"0000", x"DEAD", x"0000",
         -- Test edge cases
         x"0001", x"FFFF", x"0001", x"AFAF", x"0001", x"C001", x"00FF",
+        -- Primes and coprimes
+        std_logic_vector(to_unsigned(61,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(9929,  N_BITS_TEST)),
+        std_logic_vector(to_unsigned(21819, N_BITS_TEST)),
         -- Test examples
-        std_logic_vector(to_unsigned(255, N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(60,  N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(25,  N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(64,  N_BITS_TEST))
+        std_logic_vector(to_unsigned(255,   N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(60,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(25,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(64,    N_BITS_TEST)),
+        -- Composites 
+        std_logic_vector(to_unsigned(12,    N_BITS_TEST)),
+        std_logic_vector(to_unsigned(48000, N_BITS_TEST)),
+        std_logic_vector(to_unsigned(41314, N_BITS_TEST))
     );
         
     -- Operand B test values
@@ -113,11 +124,19 @@ architecture TB_ARCHITECTURE of Gcd_Tb is
         x"0000", x"0000", x"0001", x"0000", x"FFFF", x"0000", x"BEEF", 
         -- Test edge cases
         x"0001", x"0001", x"FFFF", x"0001", x"1F80", x"C001", x"00FF",
+        -- Primes and coprimes
+        std_logic_vector(to_unsigned(17,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(47917, N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(20243, N_BITS_TEST)),
         -- Test examples
-        std_logic_vector(to_unsigned(110, N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(84,  N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(11,  N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(88,  N_BITS_TEST))
+        std_logic_vector(to_unsigned(110,   N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(84,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(11,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(88,    N_BITS_TEST)),
+        -- Composites 
+        std_logic_vector(to_unsigned(9 ,    N_BITS_TEST)),
+        std_logic_vector(to_unsigned(36000, N_BITS_TEST)),
+        std_logic_vector(to_unsigned(20236, N_BITS_TEST))
     );
     
     -- Expected result values 
@@ -126,11 +145,17 @@ architecture TB_ARCHITECTURE of Gcd_Tb is
         x"0000", x"0001", x"0001", x"FFFF", x"FFFF", x"DEAD", x"BEEF", 
         -- Test edge cases
         x"0001", x"0001", x"0001", x"0001", x"0001", x"C001", x"00FF",
+        -- Primes and coprimes
+        x"0001", x"0001", x"0001", 
         -- Test examples
-        std_logic_vector(to_unsigned(5,   N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(12,  N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(1,   N_BITS_TEST)), 
-        std_logic_vector(to_unsigned(8,   N_BITS_TEST))
+        std_logic_vector(to_unsigned(5,     N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(12,    N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(1,     N_BITS_TEST)), 
+        std_logic_vector(to_unsigned(8,     N_BITS_TEST)),
+        -- Composites 
+        std_logic_vector(to_unsigned(3,     N_BITS_TEST)),
+        std_logic_vector(to_unsigned(12000, N_BITS_TEST)),
+        std_logic_vector(to_unsigned(2,     N_BITS_TEST))
     );
     ----------------------------------------------------------------------------
     

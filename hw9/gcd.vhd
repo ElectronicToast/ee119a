@@ -32,13 +32,13 @@
 -- Details:
 --      Euclid's subtraction algorithm, in pseudocode, is given by
 --
---              REPEAT
---                  WHILE a >= b 
---                      a = a - b 
---                  ENDWHILE
---                  swap (a, b)
---              UNTIL (b = 0)
---              gcd = a
+--                              REPEAT
+--                                  WHILE a >= b 
+--                                      a = a - b 
+--                                  ENDWHILE
+--                                  swap (a, b)
+--                              UNTIL (b = 0)
+--                              gcd = a
 --
 --      where `a` and `b` are unsigned integers. This VHDL entity implements 
 --      Euclid's subtraction algorithm using a full serial subtracter and 
@@ -94,6 +94,15 @@
 --      (for the overall system to read the result), and then transitions 
 --      back to IDLE. This is done so that the system can multiplex display 
 --      digits with time allotted for calculating. 
+--
+-- Extra Credit Attempted:
+--    - Size :  I chose to implement Euclid's subtraction with serial subtract 
+--              to try for the smallest design possible.
+--    - Speed : Yeah, no. Running this will take A While [TM]. In particular,
+--              a maximum of a nice, slow,
+--
+--              (number of clocks per cycle) * 2^(number of bits in operand)
+--                      = 17 * 2^(16) = 1,114,112 clocks          
 --
 -- Notes:
 --    - The Calculate input is denoted as `nCalculate` to reflect the 
@@ -183,8 +192,7 @@ architecture DataFlow of Gcd is
     signal bSelect :    std_logic;      -- Active high select for `B`. When 
                                         -- active, indicates that what the 
                                         -- algorithm considers `B` was initially
-                                        -- the input `A`
-                                        
+                                        -- the input `A`                                  
     -- In particular,
     --      bSelect =   0       A = `regA`      B = `regB`
     --      bSelect =   1       A = `regB`      B = `regA`
@@ -327,7 +335,7 @@ begin
     end process;
     
     -- Combinationally determine if the current `A` is less than the 
-    -- current `B`
+    -- current `B` - used to generate `bSelect1 signal
     aleb <= '1' when ( ( (bSelect = '0') and (regA < regB) ) or 
                        ( (bSelect = '1') and (regA > regB) ) ) else 
             '0';
@@ -393,12 +401,12 @@ begin
     subtrahend  <=  regB(regB'right) when bSelect = '0' else 
                     regA(regA'right);
                 
-    -- Compute the difference bit
+    -- Compute the difference bit (full adder sum with inverted subtrahend)
     difference <=   minuend xor 
                     (not subtrahend) xor 
                     carryFlag;
                     
-    -- Compute the carry out 
+    -- Compute the carry out (full adder carry out with inverted subtrahend)
     carryOut   <=   ( carryFlag and 
                     ( minuend xor (not subtrahend) ) ) or
                     ( minuend and (not subtrahend) );     
@@ -412,7 +420,7 @@ begin
             -- carry flag (start the next subtraction with no borrow)
             if (currState = IDLE) or (subCntr = SUB_CNTR_TOP) then 
                 carryFlag <= '1';
-            -- Otherwise register the carry out 
+            -- Otherwise register the carry out for the next subtract
             else
                 carryFlag <= carryOut;
             end if;
