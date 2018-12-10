@@ -202,15 +202,15 @@ architecture DataFlow of Gcd is
     -------------------------- CONSTANTS ---------------------------------------
     -- Zero for input bus size
     constant N_ZEROES :     std_logic_vector(N_BITS-1 downto 0) :=  
-                            (others => '0');
+                                (others => '0');
+                            
+    -- Top value of serial arithmetic counter (number of bits - 1)
+    constant ASCNTR_TOP :   unsigned(3 downto 0) := x"F";
     ----------------------------------------------------------------------------
     
     ---------------------- INPUT HANDLING SIGNALS ------------------------------
     -- A pair of registered signals (DFFs) for synchrnonizing calculate input
     signal nCalculateS :    std_logic_vector(1 downto 0);
-    
-    -- Top value of serial arithmetic counter (number of bits - 1)
-    signal ASCNTR_TOP :    unsigned(3 downto 0) := x"F";
     ----------------------------------------------------------------------------
     
     ------------------------- STATE SIGNALS ------------------------------------
