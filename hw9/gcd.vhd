@@ -60,6 +60,10 @@
 --      no carry out (i.e. there is a borrow out), (a - b) < 0. The value of 
 --      a must then be restored by adding b once.
 --
+--      The ending condition b = 0 is checked at the beginning of the loop to 
+--      prevent the case GCD(a, 0), where a >= 0, from causing an infinite 
+--      loop, as we do not handle such a case with case-specific logic.
+--
 --      The GCD calculation is begun when `nCalculate` becomes active (low). 
 --      The calculation result is returned in `Result`. When the GCD calculation
 --      finishes, `Result` will be held until `CanReadVals` is active, if it 
@@ -146,7 +150,8 @@
 --      12/09/2018          Ray Sun         Got design working on board 
 --      12/09/2018          Ray Sun         Implemented restoring comparison 
 --                                          for efficiency
---      12/09/2018          Ray Sun         Got design working on board 
+--      12/09/2018          Ray Sun         Got design working on board again
+--      12/09/2018          Ray Sun         Improved documentation
 --------------------------------------------------------------------------------
 
 
