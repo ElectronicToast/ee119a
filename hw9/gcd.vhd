@@ -42,7 +42,23 @@
 --
 --      where `a` and `b` are unsigned integers. This VHDL entity implements 
 --      Euclid's subtraction algorithm using a full serial subtracter and 
---      a pair of internal 16-bit registers. 
+--      a pair of internal 16-bit registers. In the interest of design size,
+--      the design uses the following interpretation of Euclid's subtraction
+--
+--                              WHILE (b != 0)
+--                                  WHILE (a - b) >= 0
+--                                      a = a - b 
+--                                  ENDWHILE
+--                                  a = a + b
+--                                  swap (a, b)
+--                              ENDWHILE
+--                              gcd = a      
+--
+--      which uses a restoring comparison. This is done so that (a < b) may 
+--      be determined just by observing the carry out of the last serial 
+--      bit subtraction operation in the calculation of (a - b). If there is 
+--      no carry out (i.e. there is a borrow out), (a - b) < 0. The value of 
+--      a must then be restored by adding b once.
 --
 --      The GCD calculation is begun when `nCalculate` becomes active (low). 
 --      The calculation result is returned in `Result`. When the GCD calculation
@@ -51,58 +67,55 @@
 --      the `ResultRdy` active high flag, indicating a valid result. The result 
 --      is valid for one clock. 
 --
---      The GCD calculator is controlled by a Moore state machine with the 
---      following states
+--      The GCD calculator is controlled by a Moore finite state machine with 
+--      the following states
 --              IDLE        Awaiting calculation start (`nCalculate` go active)
---              CALC        Calculating GCD 
+--                          Operand inputs are constantly loaded into internal 
+--                          registers.
+--              CHECK_ZERO  Check if the `B` input is zero. 
+--              SUB         Subtracting A - B until A - B < 0
+--              RESTORE     Adding B back to A 
+--              SWAP        Swapping the operand registers
 --              DONE        Done with computation, waiting for active 
 --                          `CanReadVals` to indicate valid result. 
 --
 --      The active low `nCalculate` input is synchronized with a pair of DFFs.
---      The synchronized input controls the state transition from idle to the 
---      calculation state. Whenever the calculator is in the IDLE state, the 
---      GCD operands A and B are loaded into the internal register pair. These 
---      registers are controlled by a paralle load enable (loadEn) for 
---      loading the inputs when IDLE, and a serial shift enable (shiftEn)
---      for calculation. The former takes precedence.
+--      The synchronized input controls the state transition from idle to 
+--      calculation. Whenever the calculator is in the IDLE state, the 
+--      GCD operands `A` and `B` are loaded into the internal register pair. 
+--      When calculation begins, `B` = 0 is checked so that clocks may be 
+--      saved should `B` indeed be zero.
 --
---      The GCD calculator design is centered around an "in-place" 
---      implementation of Euclid's subtraction - the inputs A and B remain in 
---      the pair of internal registers `regA` and `regB`, and swapping A and B 
---      as specified in the algorithm is done by a registered signal that 
---      tells the system to consider `regB` as A, and vice versa. This signal 
---      is implemented as an active high "B select". When this `bSelect` is
---      active, `regB` is the minuend and `regA` is the subtrahend (since the 
---      system considers `A` and `B` to be `regB` and `regA` respectively.
---
---      Subtraction is performed with a N-bit full serial subtracter. The 
+--      Subtraction is performed with a N-bit full serial adder/subtracter. The 
 --      registers `regA` and `regB` are shifted right and the LSBs are
---      subtracted. Depending on which register is A and B per subtraction, 
---      the difference, or the LSB, is shifted into the MSB of each register.
---      For example, if `bSelect` is inactive (indicating "A" is `aReg`, "B" 
---      is `bReg`), the difference will be shifted into the MSB of `aReg` while
---      `bReg` is rotated right.
+--      subtracted. The difference is shifted into `regA` from the left while 
+--      the rest of `regA` is shifted right. Meanwhile, `regB` is rotated 
+--      right to keep the bits of the registers aligned. Serial subtraction 
+--      is performed until `regA` < `regB` (when a serial subtract finishes 
+--      with a borrow out). Then `regB` is added back (restore) to `regA` 
+--      with one addition. An "addition/subtraction counter" `addSubCntr` is 
+--      used to keep track of serial arithmetic; the counter runs from 0 to a 
+--      top value of the number of bits of the operands.
 --
 --      The result is always whatever the system takes to be "A" (which may or 
 --      may not be valid at any given time). A `ResultRdy` flag is generated 
---      to indicate valid result.
---
---      Calculation finishes when the register that is considered to be "B"
---      becomes zero. A done with calculation flag (`doneCalc`) is set to 
---      transition the FSM to the DONE state. Then the result is held until
---      the can read values input `CanReadVals` is active, waits for a clock 
---      (for the overall system to read the result), and then transitions 
---      back to IDLE. This is done so that the system can multiplex display 
---      digits with time allotted for calculating. 
+--      to indicate valid result when the GCD calculation finishes (`regB` is 
+--      zero) and the can read result input is active. If it is not, the 
+--      FSM done state is latched until it is. Once `CanReadVals` is active,
+--      the FSM transitions back to the idle state in one clock. 
 --
 -- Extra Credit Attempted:
 --    - Size :  I chose to implement Euclid's subtraction with serial subtract 
---              to try for the smallest design possible.
+--              and restoring compare to try for the smallest design possible.
 --    - Speed : Yeah, no. Running this will take A While [TM]. In particular,
---              a maximum of a nice, slow,
+--              GCD(1, FFFF) will produce 
 --
---              (number of clocks per cycle) * 2^(number of bits in operand)
---                      = 17 * 2^(16) = 1,114,112 clocks          
+--                  (1 subtraction + 1 addition to swap 1 and FFFF) * 16
+--              +   (2^16 + 1 subtracts + 1 add to have FFFF -> 0) * 16
+--
+--              for a nice, slow,
+--
+--                  2(16) + (2^(16) + 1)(16) = 1,048,624 clocks
 --
 -- Notes:
 --    - The Calculate input is denoted as `nCalculate` to reflect the 
@@ -112,9 +125,7 @@
 --    - This Euclid's subtraction implementation was designed with a completely 
 --      generic operand size, but is only used as a 16-bit GCD calculator 
 --      in the overall system.
---    - This calculator was designed for minimum size, but I am too lazy to 
---      implement a compare instruction (A <= A - B, check high bit, then 
---      add B back). Could just refactor the Caltech10 ALU into VHDL...
+--    - This calculator was designed for minimum size.
 --
 -- Revision History:
 --      12/07/2018          Ray Sun         Initial revision.
@@ -125,6 +136,17 @@
 --                                          to perform comparison correctly
 --      12/08/2018          Ray Sun         Verified functionality with 
 --                                          testbench
+--      12/09/2018          Ray Sun         Made `bSelect` fully synchronous
+--      12/09/2018          Ray Sun         Added more states for easier
+--                                          handling of state transitions.
+--                                          Namely, swap comparison.
+--      12/09/2018          Ray Sun         Could not get swap-in-place to 
+--                                          work on board. Re-designed to 
+--                                          actually swap `aReg` and `bReg`
+--      12/09/2018          Ray Sun         Got design working on board 
+--      12/09/2018          Ray Sun         Implemented restoring comparison 
+--                                          for efficiency
+--      12/09/2018          Ray Sun         Got design working on board 
 --------------------------------------------------------------------------------
 
 
@@ -179,67 +201,50 @@ architecture DataFlow of Gcd is
 
     -------------------------- CONSTANTS ---------------------------------------
     -- Zero for input bus size
-    constant N_ZEROES :     unsigned(N_BITS-1 downto 0) :=  (others => '0');
+    constant N_ZEROES :     std_logic_vector(N_BITS-1 downto 0) :=  
+                            (others => '0');
     ----------------------------------------------------------------------------
     
     ---------------------- INPUT HANDLING SIGNALS ------------------------------
     -- A pair of registered signals (DFFs) for synchrnonizing calculate input
     signal nCalculateS :    std_logic_vector(1 downto 0);
+    
+    -- Top value of serial arithmetic counter (number of bits - 1)
+    signal ASCNTR_TOP :    unsigned(3 downto 0) := x"F";
     ----------------------------------------------------------------------------
     
     ------------------------- STATE SIGNALS ------------------------------------
     -- GCD calculator FSM states (2 state bits for 4 states)
-    type GCDCALCSTATE is (  IDLE,       -- Awaiting calculation start  
-                            CALC,       -- is calculating 
+    type GCDCALCSTATE is (  IDLE,       -- Awaiting calculation start 
+                            CHECK_ZERO, -- Check if B = 0
+                            SUB,        -- A <= A - B until A < B
+                            RESTORE,    -- Add B back
+                            SWAP,       -- A <=> B
                             DONE );     -- done calculating
     
     signal currState :  GCDCALCSTATE;   -- Current and next state signals
     signal nextState :  GCDCALCSTATE;
     
-    signal aleb :       std_logic;      -- Active high flag indicating that 
-                                        -- whatever register is currently A is 
-                                        -- less than whatever register is B
-    
-    signal bSelect :    std_logic;      -- Active high select for `B`. When 
-                                        -- active, indicates that what the 
-                                        -- algorithm considers `B` was initially
-                                        -- the input `A`                                  
-    -- In particular,
-    --      bSelect =   0       A = `regA`      B = `regB`
-    --      bSelect =   1       A = `regB`      B = `regA`
-                                        
-    signal doneCalc :   std_logic;      -- Active high done with GCD calculation 
-                                        -- indicator. Only high if whatever is 
-                                        -- currently `B` is zero; namely,
-                                        --          regA when bSelect = 1
-                                        --          regB when bSelect = 0
-    
-    -- Counter for control of the serial subtraction
-    --      Need 0 to 2^N_BITS range (1 extra count at end of subtraction)
-    --      For synthesis, hard-code in the range 
-    --signal subCntr :    unsigned(integer(ceil(log2(real(N_BITS)))) downto 0);
-    signal subCntr :    unsigned(4 downto 0);
+    -- Counter for control of the serial subtraction and restore (addition)
+    --    - Need 0 to `N_BITS`-1 range since each serial arithmetic operation 
+    --      takes `N_BITS` clocks
+    --    - Hard-code in range for synthesis
+    --signal addSubCntr :    unsigned(integer(
+    --                          ceil(log2(real(N_BITS))))-1 downto 0);
+    signal addSubCntr :    unsigned(3 downto 0);
     ----------------------------------------------------------------------------
     
     --------------------------- REGISTERS --------------------------------------
     -- Shift registers for the operands `A` and `B`
     --      Serially loaded when calculation starts
-    signal regA     :   unsigned(N_BITS-1 downto 0);
-    signal regB     :   unsigned(N_BITS-1 downto 0);
-    
-    -- Register control signals:
-    signal loadEn   :   std_logic;      -- Active high parallel load enable for 
-                                        -- both registers - for loading 
-                                        -- in operands when IDLE. Takes
-                                        -- precedence over shift enable
-    signal shiftEn  :   std_logic;      -- Active high shift enables for each 
-                                        -- register - when active, each register 
-                                        -- is shifted right with either the 
-                                        -- difference A - B, or the old LSB,
-                                        -- shifted in depending on `bSelect`
+    signal regA     :   std_logic_vector(N_BITS-1 downto 0);
+    signal regB     :   std_logic_vector(N_BITS-1 downto 0);
     ----------------------------------------------------------------------------
     
     ----------------- SERIAL FULL SUBTRACTER SIGNALS ---------------------------
+    signal subtract   : std_logic;      -- active high subtraction select
+                                        -- adding when low
+                                        
     signal minuend :    std_logic;      -- Bits for the full subtracter 
     signal subtrahend : std_logic;      --    minuend - subtrahend = difference
     signal difference : std_logic;
@@ -251,7 +256,7 @@ architecture DataFlow of Gcd is
 begin
 
     ----------------------------------------------------------------------------
-    --                              INPUTS                                    --
+    --                              INPUT                                     --
     ----------------------------------------------------------------------------
     
     
@@ -274,58 +279,70 @@ begin
     ----------------------------------------------------------------------------
     
     
-    -- Combinational process for state logic 
-    process ( currState, nCalculateS(1), doneCalc, CanReadVals )
+    -------------------------- State logic process -----------------------------
+    -- Determine the next FSM state combinationally
+    process ( currState, nCalculateS(1), CanReadVals, 
+              regB, addSubCntr, carryOut)
     begin
         case currState is
-            -- If in the idle state and the synchronized `nCalculate` is low, 
-            -- start calculating
+            -- If in the idle state, the synchronized `nCalculate` is low, 
+            -- and we can read, start calculating
             when IDLE => 
-                if nCalculateS(1) = '0' then 
-                    nextState <= CALC;
+                if nCalculateS(1) = '0' and CanReadVals = '1' then 
+                    nextState <= CHECK_ZERO;
                 else 
-                    nextState <= nextState;     -- Don't infer latch
+                    nextState <= IDLE;     -- Don't infer latch
                 end if;
-            -- If calculating and the register that is currently `B` is zero, 
-            -- then transition to done 
-            when CALC  =>
-                if doneCalc = '1' then 
+            -- Check if `B` is zero - if so, then done
+            when CHECK_ZERO =>
+                if (regB = N_ZEROES) then
                     nextState <= DONE;
                 else 
-                    nextState <= nextState;     -- Don't infer latch
+                    nextState <= SUB;
                 end if;
+            -- If subtracting, keep subtracting until `A` becomes negative
+            -- (there is a borrow out).
+            --    - Done with current subtraction operation (counter is at top)
+            --    - Borrow out.
+            when SUB =>
+                if (addSubCntr = ASCNTR_TOP) and
+                   (carryOut = '0') then 
+                    nextState <= RESTORE;
+                else 
+                    nextState <= SUB;     -- Don't infer latch
+                end if;
+            -- Add back `B` whenever `A - B` is less than `B` - do one addition
+            -- (add until the counter is at top)
+            when RESTORE =>
+                if (addSubCntr = ASCNTR_TOP) then 
+                    nextState <= SWAP;
+                else 
+                    nextState <= RESTORE; -- Don't infer latch
+                end if;
+            -- Swap state takes 1 clock only; go check if `B` is zero
+            when SWAP =>
+                nextState <= CHECK_ZERO;
             -- Only leave the done state if `CanReadVals` is active (high)
             -- so the system can read outputs
             when DONE =>
                 if CanReadVals = '1' then
                     nextState <= IDLE;
                 else 
-                    nextState <= nextState;     -- Don't infer latch
+                    nextState <= DONE;     -- Don't infer latch
                 end if;    
         end case;
     end process;
+    ----------------------------------------------------------------------------
     
-    
-    -- FSM output decoding 
-    --      Output register control signals depending on current state
-    
-    -- Keep parallel loading operands into registers if IDLE
-    loadEn <=   '1' when currState = IDLE else 
-                '0';
-    -- Enable shifting (subtraction) only when calculating and not done, and 
-    -- when the subtraction counter is not at top
-    shiftEn <=  '1' when (currState = CALC) and 
-                         (doneCalc = '0') and 
-                         (subCntr(subCntr'high) = '0') else 
-                '0';
-    
-    -- Update state process - register the new current state on `SysClk`
+    ------------------------ Update state process ------------------------------
+    -- register the new current state on `SysClk`
     process (SysClk)
     begin 
         if rising_edge(SysClk) then 
             currState <= nextState;
         end if;
     end process;
+    ----------------------------------------------------------------------------
     
     
     ----------------------------------------------------------------------------
@@ -333,113 +350,60 @@ begin
     ----------------------------------------------------------------------------
     
     
-    -- Process to increment or clear subtraction counter 
+    ------------------------ Add/sub counter process ---------------------------
+    -- Process to increment or clear add/sub counter 
+    --    - Synchronously cleared whenever not subtracting or restoring 
+    --    - Synchronously incremented otherwise
     process (SysClk)
     begin 
         if rising_edge(SysClk) then 
-            -- If not calculating or at top value, clear
-            if (currState = IDLE) or 
-               (subCntr(subCntr'high) = '1') then
-                subCntr <= (others => '0');
-            -- Otherwise increment 
-            else
-                subCntr <= subCntr + 1;
+            -- If subtracting or restoring for compare, increment the counter
+            if (currState = SUB) or 
+               (currState = RESTORE) then
+                addSubCntr <= addSubCntr + 1;
+            -- Otherwise reset 
+            else 
+                addSubCntr <= (others => '0');
             end if;
         end if;
     end process;
-    
-    -- Combinationally determine if the current `A` is less than the 
-    -- current `B` - used to generate `bSelect1 signal
-    aleb <= '1' when ( ( (bSelect = '0') and (regA < regB) ) or 
-                       ( (bSelect = '1') and (regA > regB) ) ) else 
-            '0';
-    
-    -- Process to swap which register is considered `A` and `B` by toggling
-    -- `bSelect` when appropriate 
-    process (SysClk, currState, aleb)
-    begin
-        -- If not calculating, reset (initially A is `regA`) unless
-        -- A < B - handles edge case of GCD(0, 1), etc.
-        if currState = IDLE then 
-            if regA < regB then 
-                bSelect <= '1';
-            else 
-                bSelect <= '0';
-            end if;
-        -- When the register that is currently `A` becomes less than the 
-        -- register that is currently `B`, at the end of a subtraction 
-        -- swap
-        --
-        -- If A is `regA` and B is `regB`, and A < B, swap 
-        -- Otherwise A is `regB` and B is `regA`; if A < B, swap 
-        elsif rising_edge(SysClk) and 
-              (subCntr(subCntr'high) = '1') and 
-              (aleb = '1') then
-            bSelect <= not bSelect;
-        end if;
-    end process;
-    
-    
-    -- Combinational process to determine when done calculating - when the 
-    -- register considered to be `B` is zero 
-    process (regA, regB, bSelect)
-    begin 
-        -- If B is currently `regB`, check its equality 
-        if bSelect = '0' then 
-            if regB = N_ZEROES then 
-                doneCalc <= '1';
-            else 
-                doneCalc <= '0';
-            end if;
-        -- Otherwise, B is `regA`, so check its equality
-        else
-            if regA = N_ZEROES then 
-                doneCalc <= '1';
-            else 
-                doneCalc <= '0';
-            end if;
-        end if;
-    end process;
-    
-    
-    ----------------------------------------------------------------------------
-    --                          FULL SSUBTRACTER                              --
     ----------------------------------------------------------------------------
     
     
-    -- Select the minuend and subtrahend 
-    --      When `bSelect` is inactive : `regA`(LSB) - `regB`(LSB)
-    --      When `bSelect` is active :   `regB`(LSB) - `regA`(LSB)
-    minuend     <=  regA(regA'right) when bSelect = '0' else 
-                    regB(regB'right);
-    subtrahend  <=  regB(regB'right) when bSelect = '0' else 
-                    regA(regA'right);
+    ------------------------ Full adder/subtracter -----------------------------
+    -- We are subtracting if in the subtracting state 
+    subtract    <=  '1' when currState = SUB else 
+                    '0';
+    
+    -- The minuend is the LSB of A, the subtrahend is the LSB of B
+    minuend     <=  regA(regA'right);
+    subtrahend  <=  regB(regB'right);
                 
     -- Compute the difference bit (full adder sum with inverted subtrahend)
-    difference <=   minuend xor 
-                    (not subtrahend) xor 
-                    carryFlag;
+    difference  <=  minuend xor 
+                    subtrahend xor 
+                    subtract xor carryFlag;
                     
     -- Compute the carry out (full adder carry out with inverted subtrahend)
-    carryOut   <=   ( carryFlag and 
-                    ( minuend xor (not subtrahend) ) ) or
-                    ( minuend and (not subtrahend) );     
+    carryOut    <=  ( carryFlag and 
+                        ( minuend xor subtrahend xor subtract ) ) or
+                    ( minuend and (subtrahend xor subtract) );     
                     
     -- Process that determines when to enable or preset the carry flag
     --      Effectively a DFF with preset 
     process (SysClk)
     begin
         if rising_edge(SysClk) then 
-            -- If not calculating or at the end of a subtraction, set the 
-            -- carry flag (start the next subtraction with no borrow)
-            if (currState = IDLE) or (subCntr(subCntr'high) = '1') then 
+            -- Preset the carry (clear the borrow) before subtraction is done
+            if (currState = CHECK_ZERO) then 
                 carryFlag <= '1';
-            -- Otherwise register the carry out for the next subtract
+            -- Otherwise register the carry out for the next operation
             else
                 carryFlag <= carryOut;
             end if;
         end if;
     end process;
+    ----------------------------------------------------------------------------
     
     
     ----------------------------------------------------------------------------
@@ -447,41 +411,39 @@ begin
     ----------------------------------------------------------------------------
     
     
-    -- Process for updating each of the operand registers on system clock
+    ----------------------- Register update process ----------------------------
+    -- Updates each of the operand registers synchronously based on the 
+    -- current state
     process (SysClk)
     begin 
         if rising_edge(SysClk) then 
-            -- If parallel loading, then load the operands into the registers 
-            --      This takes precedence over serial shift
-            if loadEn = '1' then
-                regA <= unsigned(A);
-                regB <= unsigned(B);
-            -- Otherwise, if serial loading, shift
-            elsif shiftEn = '1' then 
-                -- Shift in the new bit (MSB) from left 
-                -- For `regA`, the new MSB is the difference whenever A is 
-                -- `regA` and the old LSB otherwise
-                -- For `regB`, the new MSB is the difference whenever A is 
-                -- `regB` and the  old LSB otherwise
-                if bSelect = '0' then
-                    regA(regA'left) <= Difference;
-                    regB(regB'left) <= regB(regB'right);
-               else
-                    regA(regA'left) <= regA(regA'right);
-                    regB(regB'left) <= Difference;
-                end if;
-                -- Shift the other bits right 
-                regA(regA'left-1 downto regA'right) <=
-                    regA(regA'left downto regA'right+1);
-                regB(regB'left-1 downto regB'right) <=
-                    regB(regB'left downto regB'right+1);
-            -- Otherwise don't infer latch
-            else 
-                regA <= regA;
-                regB <= regB;
-            end if;
+            -- Determine operations based on current system state
+            case currState is 
+                -- Load the operands when in the idle state 
+                when IDLE =>
+                    regA <= A;
+                    regB <= B;
+                -- When subtracting (or restoring), the difference (or sum) 
+                -- is shifted into `A` from the left, `A` is shifted right, and 
+                -- `B` is rotated right 
+                when SUB =>
+                    regA <= difference     & regA(regA'high downto regA'low+1);
+                    regB <= regB(regB'low) & regB(regB'high downto regB'low+1);
+                when RESTORE =>
+                    regA <= difference     & regA(regA'high downto regA'low+1);
+                    regB <= regB(regB'low) & regB(regB'high downto regB'low+1);
+                -- When swapping, swap the registers
+                when SWAP =>
+                    regA <= regB;
+                    regB <= regA;
+                -- Otherwise, don't change (do not infer latch)
+                when others =>
+                    regA <= regA;
+                    regB <= regB;
+            end case;
         end if;
     end process;
+    ----------------------------------------------------------------------------
     
     
     ----------------------------------------------------------------------------
@@ -489,10 +451,8 @@ begin
     ----------------------------------------------------------------------------
     
     
-    -- The GCD result is always just whatever `A` is at the end of calculation 
-    -- (may or may not be valid) - since the GCD is done in place
-    Result  <=  std_logic_vector(regA) when bSelect = '0' else 
-                std_logic_vector(regB);
+    -- The GCD result is always just whatever `A` is when the result is ready
+    Result  <=  std_logic_vector(regA);
     
     -- Set the result ready flag high when appropriate for the system to read -
     -- when done and `CanReadVals` is active
